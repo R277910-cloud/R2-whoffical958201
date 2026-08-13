@@ -1,6 +1,6 @@
 /* =========================================================
    R2 FOOTBALL GAMES
-   app.js — FINAL
+   app.js — FIXED
    ========================================================= */
 
 "use strict";
@@ -65,7 +65,6 @@ const R2 = {
   }
 };
 
-
 /* =========================================================
    DATA
    ========================================================= */
@@ -94,7 +93,6 @@ const CONFIG = DATA.config || {
   }
 };
 
-
 /* =========================================================
    DOM
    ========================================================= */
@@ -103,14 +101,11 @@ function $(selector) {
   return document.querySelector(selector);
 }
 
-
 function $all(selector) {
   return [...document.querySelectorAll(selector)];
 }
 
-
 function createElement(tag, className = "", text = "") {
-
   const el = document.createElement(tag);
 
   if (className) {
@@ -124,15 +119,11 @@ function createElement(tag, className = "", text = "") {
   return el;
 }
 
-
 function clearElement(el) {
-
   if (el) {
     el.innerHTML = "";
   }
-
 }
-
 
 /* =========================================================
    STORAGE
@@ -141,11 +132,8 @@ function clearElement(el) {
 const Storage = {
 
   get(key, fallback = null) {
-
     try {
-
-      const value =
-        localStorage.getItem(key);
+      const value = localStorage.getItem(key);
 
       if (value === null) {
         return fallback;
@@ -154,86 +142,60 @@ const Storage = {
       return JSON.parse(value);
 
     } catch {
-
       return fallback;
-
     }
-
   },
 
   set(key, value) {
-
     try {
-
       localStorage.setItem(
         key,
         JSON.stringify(value)
       );
-
     } catch {}
-
   },
 
   remove(key) {
-
     try {
-
       localStorage.removeItem(key);
-
     } catch {}
-
   }
 
 };
-
 
 /* =========================================================
    UTILITIES
    ========================================================= */
 
 function random(min, max) {
-
   return Math.floor(
     Math.random() * (max - min + 1)
   ) + min;
-
 }
-
 
 function chance(percent) {
-
   return Math.random() * 100 < percent;
-
 }
 
-
 function shuffle(array) {
-
   return [...array].sort(
     () => Math.random() - 0.5
   );
-
 }
 
-
 function formatMoney(value) {
-
   const number = Number(value || 0);
 
   if (number >= 1000) {
-
     return (
       (number / 1000)
         .toFixed(number % 1000 === 0 ? 0 : 1)
       + " مليار"
     );
-
   }
 
   return `${number} مليون`;
-
 }
-
 
 /* =========================================================
    NOTIFICATION
@@ -244,14 +206,12 @@ function notify(message, type = "info") {
   let toast = $(".r2-toast");
 
   if (!toast) {
-
     toast = createElement(
       "div",
       "r2-toast"
     );
 
     document.body.appendChild(toast);
-
   }
 
   toast.textContent = message;
@@ -262,13 +222,9 @@ function notify(message, type = "info") {
   clearTimeout(toast._timer);
 
   toast._timer = setTimeout(() => {
-
     toast.classList.remove("show");
-
   }, 2500);
-
 }
-
 
 /* =========================================================
    SCREEN SYSTEM
@@ -291,18 +247,12 @@ function showScreen(screenName) {
     top: 0,
     behavior: "instant"
   });
-
 }
-
 
 function goHome() {
-
   R2.mode = null;
-
   showScreen("home");
-
 }
-
 
 /* =========================================================
    PLAYER CARD
@@ -311,29 +261,24 @@ function goHome() {
 function createPlayerCard(player, options = {}) {
 
   if (!player) {
-
     return createElement(
       "div",
       "player-card empty",
       "لا يوجد لاعب"
     );
-
   }
 
-  const card =
-    createElement(
-      "div",
-      "player-card"
-    );
+  const card = createElement(
+    "div",
+    "player-card"
+  );
 
-  card.dataset.playerId =
-    player.id;
+  card.dataset.playerId = player.id;
 
-  const top =
-    createElement(
-      "div",
-      "player-card-top"
-    );
+  const top = createElement(
+    "div",
+    "player-card-top"
+  );
 
   top.appendChild(
     createElement(
@@ -370,7 +315,6 @@ function createPlayerCard(player, options = {}) {
   );
 
   if (options.price !== undefined) {
-
     card.appendChild(
       createElement(
         "div",
@@ -378,7 +322,6 @@ function createPlayerCard(player, options = {}) {
         formatMoney(options.price)
       )
     );
-
   }
 
   if (options.captain) {
@@ -386,9 +329,7 @@ function createPlayerCard(player, options = {}) {
   }
 
   return card;
-
 }
-
 
 /* =========================================================
    PLAYER LOOKUP
@@ -401,7 +342,6 @@ function findPlayer(id) {
   ) || null;
 
 }
-
 
 /* =========================================================
    NAME SETUP
@@ -442,7 +382,6 @@ function setupNames() {
 
 }
 
-
 /* =========================================================
    RESET GAME
    ========================================================= */
@@ -475,7 +414,6 @@ function resetGame() {
   };
 
 }
-
 
 /* =========================================================
    START GAME
@@ -511,7 +449,6 @@ function startGame(mode) {
 
 }
 
-
 /* =========================================================
    AUCTION
    ========================================================= */
@@ -531,7 +468,6 @@ function startAuction(mode) {
     );
 
     return;
-
   }
 
   R2.auction = {
@@ -555,9 +491,7 @@ function startAuction(mode) {
   showScreen("auction");
 
   renderAuction();
-
 }
-
 
 /* =========================================================
    AUCTION CURRENT PLAYER
@@ -571,7 +505,6 @@ function getAuctionItem() {
 
 }
 
-
 function getAuctionPlayer() {
 
   const item =
@@ -580,9 +513,7 @@ function getAuctionPlayer() {
   return item
     ? item.player
     : null;
-
 }
-
 
 /* =========================================================
    RENDER AUCTION
@@ -629,9 +560,7 @@ function renderAuction() {
   }
 
   updateAuctionUI();
-
 }
-
 
 /* =========================================================
    AUCTION UI
@@ -689,9 +618,7 @@ function updateAuctionUI() {
   }
 
   renderCurrentAuctionPrice();
-
 }
-
 
 /* =========================================================
    BID
@@ -718,7 +645,6 @@ function addBid(playerNumber, amount) {
     );
 
     return;
-
   }
 
   R2.auction.currentBid =
@@ -736,6 +662,9 @@ function addBid(playerNumber, amount) {
 
 }
 
+/* =========================================================
+   CUSTOM BID
+   ========================================================= */
 
 function submitCustomBid(playerNumber) {
 
@@ -758,7 +687,6 @@ function submitCustomBid(playerNumber) {
     );
 
     return;
-
   }
 
   const current =
@@ -777,7 +705,6 @@ function submitCustomBid(playerNumber) {
     );
 
     return;
-
   }
 
   if (amount > player.budget) {
@@ -788,7 +715,6 @@ function submitCustomBid(playerNumber) {
     );
 
     return;
-
   }
 
   R2.auction.currentBid =
@@ -800,9 +726,7 @@ function submitCustomBid(playerNumber) {
   input.value = "";
 
   updateAuctionUI();
-
 }
-
 
 /* =========================================================
    RENDER PRICE
@@ -831,9 +755,7 @@ function renderCurrentAuctionPrice() {
       }
     )
   );
-
 }
-
 
 /* =========================================================
    AUCTION PASS
@@ -857,7 +779,6 @@ function passAuction() {
     );
 
     return;
-
   }
 
   const buyer =
@@ -874,7 +795,6 @@ function passAuction() {
     );
 
     return;
-
   }
 
   buyer.budget -= price;
@@ -887,9 +807,7 @@ function passAuction() {
   );
 
   nextAuctionPlayer();
-
 }
-
 
 /* =========================================================
    DIRECT GIVE
@@ -918,7 +836,6 @@ function givePlayerToOpponent(playerNumber) {
     );
 
     return;
-
   }
 
   receiver.budget -= price;
@@ -926,9 +843,7 @@ function givePlayerToOpponent(playerNumber) {
   receiver.squad.push(player);
 
   nextAuctionPlayer();
-
 }
-
 
 /* =========================================================
    NEXT AUCTION
@@ -949,9 +864,7 @@ function nextAuctionPlayer() {
   }
 
   renderAuction();
-
 }
-
 
 /* =========================================================
    FINISH AUCTION
@@ -965,9 +878,7 @@ function finishAuction() {
   renderWildcardScreen();
 
   showScreen("wildcard");
-
 }
-
 
 /* =========================================================
    WILDCARD
@@ -999,9 +910,8 @@ function renderWildcardScreen() {
 
 }
 
-
 /* =========================================================
-   WILDCARD
+   USE WILDCARD
    ========================================================= */
 
 function useWildcard(playerNumber, playerId) {
@@ -1019,7 +929,6 @@ function useWildcard(playerNumber, playerId) {
     );
 
     return;
-
   }
 
   const index =
@@ -1037,7 +946,6 @@ function useWildcard(playerNumber, playerId) {
     );
 
     return;
-
   }
 
   team.wildCardUsed =
@@ -1047,9 +955,7 @@ function useWildcard(playerNumber, playerId) {
     "تم استخدام الـ Wild Card",
     "success"
   );
-
 }
-
 
 /* =========================================================
    CAPTAIN
@@ -1068,9 +974,7 @@ function renderCaptainSelection() {
     "two",
     $("#captainTeamTwo")
   );
-
 }
-
 
 function renderCaptainTeam(
   playerNumber,
@@ -1108,9 +1012,7 @@ function renderCaptainTeam(
     container.appendChild(card);
 
   });
-
 }
-
 
 function chooseCaptain(
   playerNumber,
@@ -1140,9 +1042,7 @@ function chooseCaptain(
     );
 
   }
-
 }
-
 
 /* =========================================================
    DEAL OR NO DEAL
@@ -1155,7 +1055,6 @@ const DEAL_POSITIONS = [
   "CAM",
   "ST"
 ];
-
 
 function startDeal() {
 
@@ -1174,9 +1073,7 @@ function startDeal() {
   R2.players.two.squad = [];
 
   startDealRound();
-
 }
-
 
 function startDealRound() {
 
@@ -1189,7 +1086,6 @@ function startDealRound() {
 
     finishDeal();
     return;
-
   }
 
   const usedIds = [
@@ -1214,9 +1110,7 @@ function startDealRound() {
   showScreen("deal");
 
   renderDealRound();
-
 }
-
 
 function renderDealRound() {
 
@@ -1262,9 +1156,7 @@ function renderDealRound() {
     container.appendChild(button);
 
   });
-
 }
-
 
 function openDealBox(boxNumber) {
 
@@ -1278,7 +1170,6 @@ function openDealBox(boxNumber) {
     );
 
     return;
-
   }
 
   if (
@@ -1286,9 +1177,7 @@ function openDealBox(boxNumber) {
       boxNumber
     )
   ) {
-
     return;
-
   }
 
   const box =
@@ -1335,9 +1224,7 @@ function openDealBox(boxNumber) {
     );
 
   });
-
 }
-
 
 /* =========================================================
    DEAL CHOICE
@@ -1359,9 +1246,7 @@ function getLastOpenedPlayer() {
   return box
     ? box.player
     : null;
-
 }
-
 
 function dealChoice(
   playerNumber,
@@ -1378,7 +1263,6 @@ function dealChoice(
     );
 
     return;
-
   }
 
   const player =
@@ -1410,7 +1294,6 @@ function dealChoice(
     );
 
     return;
-
   }
 
   if (choice === "NO DEAL") {
@@ -1425,17 +1308,13 @@ function dealChoice(
       );
 
       return;
-
     }
 
     R2.deal.attempts++;
 
     startDealRound();
-
   }
-
 }
-
 
 /* =========================================================
    FINISH DEAL
@@ -1446,9 +1325,7 @@ function finishDeal() {
   renderWildcardScreen();
 
   showScreen("wildcard");
-
 }
-
 
 /* =========================================================
    AI
@@ -1494,7 +1371,6 @@ const AI_LEVELS = {
 
 };
 
-
 /* =========================================================
    TEAM STRENGTH
    ========================================================= */
@@ -1519,9 +1395,7 @@ function teamStrength(team) {
     );
 
   return total / players.length;
-
 }
-
 
 function captainBonus(
   team,
@@ -1539,9 +1413,7 @@ function captainBonus(
     Number(captain.overall || 0)
     - base
   ) * 0.05;
-
 }
-
 
 /* =========================================================
    MATCH
@@ -1642,16 +1514,13 @@ function simulateMatch() {
 
     R2.match.winner =
       "تعادل";
-
   }
 
   R2.match.finished =
     true;
 
   renderMatchResult();
-
 }
-
 
 /* =========================================================
    MATCH EVENTS
@@ -1672,9 +1541,7 @@ function getAttackingPlayers(team) {
         player.position
       )
   );
-
 }
-
 
 function pickRandomPlayer(team) {
 
@@ -1688,9 +1555,7 @@ function pickRandomPlayer(team) {
       team.length - 1
     )
   ];
-
 }
-
 
 function generateMatchEvents(
   scoreOne,
@@ -1796,9 +1661,7 @@ function generateMatchEvents(
     (a, b) =>
       a.minute - b.minute
   );
-
 }
-
 
 /* =========================================================
    PLAYER OF MATCH
@@ -1821,7 +1684,9 @@ function calculatePlayerOfMatch() {
     players[0];
 
   let bestScore =
-    Number(best.overall || 0);
+    Number(
+      best.overall || 0
+    );
 
   R2.match.events.forEach(event => {
 
@@ -1841,7 +1706,9 @@ function calculatePlayerOfMatch() {
     }
 
     const score =
-      Number(player.overall || 0) + 6;
+      Number(
+        player.overall || 0
+      ) + 6;
 
     if (score > bestScore) {
 
@@ -1853,9 +1720,7 @@ function calculatePlayerOfMatch() {
   });
 
   return best;
-
 }
-
 
 /* =========================================================
    MATCH RESULT
@@ -1886,9 +1751,7 @@ function renderMatchResult() {
   }
 
   renderMatchStatistics();
-
 }
-
 
 function renderMatchStatistics() {
 
@@ -1952,9 +1815,7 @@ function renderMatchStatistics() {
     );
 
   }
-
 }
-
 
 /* =========================================================
    SHARE
@@ -1962,13 +1823,11 @@ function renderMatchStatistics() {
 
 function shareResult() {
 
-  const text =
-    `R2 Football Games\n` +
-    `${R2.players.one.name || "اللاعب 1"} ` +
-    `${R2.match.scoreOne} - ` +
-    `${R2.match.scoreTwo} ` +
-    `${R2.players.two.name || "اللاعب 2"}\n` +
-    `الفائز: ${R2.match.winner}`;
+  const text = `
+R2 Football Games
+${R2.players.one.name || "اللاعب 1"} ${R2.match.scoreOne} - ${R2.match.scoreTwo} ${R2.players.two.name || "اللاعب 2"}
+الفائز: ${R2.match.winner}
+`;
 
   if (navigator.share) {
 
@@ -1979,7 +1838,6 @@ function shareResult() {
     }).catch(() => {});
 
     return;
-
   }
 
   if (navigator.clipboard) {
@@ -1992,9 +1850,7 @@ function shareResult() {
     );
 
   }
-
 }
-
 
 /* =========================================================
    ONLINE
@@ -2027,9 +1883,7 @@ function generateRoomCode() {
   }
 
   return code;
-
 }
-
 
 function createOnlineRoom() {
 
@@ -2056,7 +1910,9 @@ function createOnlineRoom() {
       "function"
   ) {
 
-    window.R2_ONLINE.createRoom(code);
+    window.R2_ONLINE.createRoom(
+      code
+    );
 
   }
 
@@ -2071,9 +1927,7 @@ function createOnlineRoom() {
     `تم إنشاء الغرفة ${code}`,
     "success"
   );
-
 }
-
 
 function joinOnlineRoom(code) {
 
@@ -2093,7 +1947,6 @@ function joinOnlineRoom(code) {
     );
 
     return;
-
   }
 
   R2.online.roomCode =
@@ -2111,7 +1964,9 @@ function joinOnlineRoom(code) {
       "function"
   ) {
 
-    window.R2_ONLINE.joinRoom(clean);
+    window.R2_ONLINE.joinRoom(
+      clean
+    );
 
   }
 
@@ -2119,15 +1974,16 @@ function joinOnlineRoom(code) {
     `تم الانضمام إلى الغرفة ${clean}`,
     "success"
   );
-
 }
-
 
 /* =========================================================
    ONLINE MESSAGE BRIDGE
    ========================================================= */
 
-function sendOnlineMessage(type, data = {}) {
+function sendOnlineMessage(
+  type,
+  data = {}
+) {
 
   if (
     window.R2_ONLINE &&
@@ -2141,13 +1997,10 @@ function sendOnlineMessage(type, data = {}) {
     });
 
     return true;
-
   }
 
   return false;
-
 }
-
 
 window.addEventListener(
   "r2-online-message",
@@ -2165,31 +2018,37 @@ window.addEventListener(
   }
 );
 
-
-function handleOnlineMessage(message) {
+function handleOnlineMessage(
+  message
+) {
 
   if (!message.type) {
     return;
   }
 
   if (
-    message.type === "room-created"
+    message.type ===
+    "room-created"
   ) {
 
-    R2.online.connected = true;
+    R2.online.connected =
+      true;
 
   }
 
   if (
-    message.type === "room-joined"
+    message.type ===
+    "room-joined"
   ) {
 
-    R2.online.connected = true;
+    R2.online.connected =
+      true;
 
   }
 
   if (
-    message.type === "player-name"
+    message.type ===
+    "player-name"
   ) {
 
     if (message.data?.name) {
@@ -2202,7 +2061,8 @@ function handleOnlineMessage(message) {
   }
 
   if (
-    message.type === "ping"
+    message.type ===
+    "ping"
   ) {
 
     sendOnlineMessage(
@@ -2212,7 +2072,6 @@ function handleOnlineMessage(message) {
   }
 
 }
-
 
 /* =========================================================
    FRIEND SYSTEM
@@ -2237,9 +2096,7 @@ function generateFriendId() {
   }
 
   return id;
-
 }
-
 
 function getMyFriendId() {
 
@@ -2261,11 +2118,11 @@ function getMyFriendId() {
   }
 
   return id;
-
 }
 
-
-function sendFriendRequest(friendId) {
+function sendFriendRequest(
+  friendId
+) {
 
   const clean =
     String(friendId || "")
@@ -2282,16 +2139,13 @@ function sendFriendRequest(friendId) {
     );
 
     return;
-
   }
 
   notify(
     "تم إرسال طلب الصداقة",
     "success"
   );
-
 }
-
 
 /* =========================================================
    SETTINGS
@@ -2313,7 +2167,6 @@ const SETTINGS = {
 
 };
 
-
 function setVolume(value) {
 
   SETTINGS.volume =
@@ -2323,9 +2176,7 @@ function setVolume(value) {
     "r2-volume",
     SETTINGS.volume
   );
-
 }
-
 
 function setDifficulty(value) {
 
@@ -2345,9 +2196,7 @@ function setDifficulty(value) {
     `تم اختيار مستوى ${AI_LEVELS[value].name}`,
     "success"
   );
-
 }
-
 
 /* =========================================================
    EVENTS
@@ -2376,7 +2225,6 @@ function renderEvents() {
     );
 
     return;
-
   }
 
   container.appendChild(
@@ -2421,17 +2269,16 @@ function renderEvents() {
       );
 
       item.appendChild(button);
-
     }
 
     container.appendChild(item);
 
   });
-
 }
 
-
-function openEventWeek(weekNumber) {
+function openEventWeek(
+  weekNumber
+) {
 
   const week =
     HELPERS.getEventWeek
@@ -2448,10 +2295,11 @@ function openEventWeek(weekNumber) {
     );
 
     return;
-
   }
 
-  showScreen("event-week");
+  showScreen(
+    "event-week"
+  );
 
   const container =
     $("#eventPlayers");
@@ -2471,9 +2319,7 @@ function openEventWeek(weekNumber) {
 
     }
   );
-
 }
-
 
 /* =========================================================
    BUTTON BINDING
@@ -2495,7 +2341,6 @@ function bindButtons() {
 
   });
 
-
   $all(
     "[data-home]"
   ).forEach(button => {
@@ -2506,7 +2351,6 @@ function bindButtons() {
     );
 
   });
-
 
   const bidOne =
     $("#bidOneMillion");
@@ -2524,7 +2368,6 @@ function bindButtons() {
 
   }
 
-
   const bidFive =
     $("#bidFiveMillion");
 
@@ -2541,7 +2384,6 @@ function bindButtons() {
 
   }
 
-
   const custom =
     $("#submitCustomBid");
 
@@ -2557,7 +2399,6 @@ function bindButtons() {
 
   }
 
-
   const pass =
     $("#passAuction");
 
@@ -2569,7 +2410,6 @@ function bindButtons() {
     );
 
   }
-
 
   const share =
     $("#shareResult");
@@ -2583,7 +2423,6 @@ function bindButtons() {
 
   }
 
-
   const createRoom =
     $("#createRoom");
 
@@ -2595,7 +2434,6 @@ function bindButtons() {
     );
 
   }
-
 
   const joinRoom =
     $("#joinRoom");
@@ -2620,7 +2458,6 @@ function bindButtons() {
 
   }
 
-
   const friendButton =
     $("#sendFriendRequest");
 
@@ -2644,7 +2481,6 @@ function bindButtons() {
 
   }
 
-
   const volume =
     $("#siteVolume");
 
@@ -2662,7 +2498,6 @@ function bindButtons() {
     );
 
   }
-
 
   const difficulty =
     $("#difficultySelect");
@@ -2682,7 +2517,6 @@ function bindButtons() {
 
   }
 
-
   const events =
     $("#eventsButton");
 
@@ -2692,7 +2526,9 @@ function bindButtons() {
       "click",
       () => {
 
-        showScreen("events");
+        showScreen(
+          "events"
+        );
 
         renderEvents();
 
@@ -2700,7 +2536,6 @@ function bindButtons() {
     );
 
   }
-
 
   const friends =
     $("#friendsButton");
@@ -2710,11 +2545,12 @@ function bindButtons() {
     friends.addEventListener(
       "click",
       () =>
-        showScreen("friends")
+        showScreen(
+          "friends"
+        )
     );
 
   }
-
 
   const settings =
     $("#settingsButton");
@@ -2724,11 +2560,12 @@ function bindButtons() {
     settings.addEventListener(
       "click",
       () =>
-        showScreen("settings")
+        showScreen(
+          "settings"
+        )
     );
 
   }
-
 
   const online =
     $("#onlineButton");
@@ -2738,11 +2575,12 @@ function bindButtons() {
     online.addEventListener(
       "click",
       () =>
-        showScreen("online")
+        showScreen(
+          "online"
+        )
     );
 
   }
-
 
   const captain =
     $("#continueCaptain");
@@ -2755,7 +2593,6 @@ function bindButtons() {
     );
 
   }
-
 
   const deal =
     $("#dealButton");
@@ -2773,7 +2610,6 @@ function bindButtons() {
 
   }
 
-
   const noDeal =
     $("#noDealButton");
 
@@ -2789,7 +2625,6 @@ function bindButtons() {
     );
 
   }
-
 
   const finishDeal =
     $("#finishDealRound");
@@ -2811,7 +2646,6 @@ function bindButtons() {
   }
 
 }
-
 
 /* =========================================================
    INITIALIZE
@@ -2842,9 +2676,7 @@ function initializeApp() {
   }
 
   showScreen("home");
-
 }
-
 
 /* =========================================================
    DOM READY
@@ -2865,7 +2697,6 @@ if (
   initializeApp();
 
 }
-
 
 /* =========================================================
    GLOBAL API
@@ -2911,7 +2742,6 @@ window.R2_APP = {
   goHome
 
 };
-
 
 /* =========================================================
    FINAL CHECK
