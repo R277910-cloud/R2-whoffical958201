@@ -1,6 +1,6 @@
 /* =========================================================
    R2 FOOTBALL GAMES
-   app.js
+   app.js — FINAL
    ========================================================= */
 
 "use strict";
@@ -46,8 +46,7 @@ const R2 = {
     opened: [],
     attempts: 1,
     playerOneChoice: null,
-    playerTwoChoice: null,
-    roundFinished: false
+    playerTwoChoice: null
   },
 
   match: {
@@ -68,19 +67,36 @@ const R2 = {
 
 
 /* =========================================================
-   SHORTCUTS
+   DATA
    ========================================================= */
 
-const DATA = window.R2_DATA;
+const DATA = window.R2_DATA || {};
 
-const PLAYERS = DATA.players;
-const POSITIONS = DATA.positions;
-const FORMATIONS = DATA.formations;
-const HELPERS = DATA.helpers;
+const PLAYERS = DATA.players || [];
+const POSITIONS = DATA.positions || {};
+const FORMATIONS = DATA.formations || {};
+const HELPERS = DATA.helpers || {};
+
+const CONFIG = DATA.config || {
+  auction: {
+    startPrice: 5,
+    minBid: 1,
+    bigBidStep: 5,
+    maxBudget: 2000
+  },
+
+  onlineRoom: {
+    codeLength: 6
+  },
+
+  friendId: {
+    length: 16
+  }
+};
 
 
 /* =========================================================
-   DOM HELPERS
+   DOM
    ========================================================= */
 
 function $(selector) {
@@ -95,31 +111,31 @@ function $all(selector) {
 
 function createElement(tag, className = "", text = "") {
 
-  const element = document.createElement(tag);
+  const el = document.createElement(tag);
 
   if (className) {
-    element.className = className;
+    el.className = className;
   }
 
-  if (text) {
-    element.textContent = text;
+  if (text !== "") {
+    el.textContent = text;
   }
 
-  return element;
+  return el;
 }
 
 
-function clearElement(element) {
+function clearElement(el) {
 
-  if (!element) return;
-
-  element.innerHTML = "";
+  if (el) {
+    el.innerHTML = "";
+  }
 
 }
 
 
 /* =========================================================
-   SAFE LOCAL STORAGE
+   STORAGE
    ========================================================= */
 
 const Storage = {
@@ -128,7 +144,8 @@ const Storage = {
 
     try {
 
-      const value = localStorage.getItem(key);
+      const value =
+        localStorage.getItem(key);
 
       if (value === null) {
         return fallback;
@@ -144,7 +161,6 @@ const Storage = {
 
   },
 
-
   set(key, value) {
 
     try {
@@ -154,19 +170,16 @@ const Storage = {
         JSON.stringify(value)
       );
 
-    } catch {
-
-      console.warn("LocalStorage unavailable.");
-
-    }
+    } catch {}
 
   },
-
 
   remove(key) {
 
     try {
+
       localStorage.removeItem(key);
+
     } catch {}
 
   }
@@ -175,7 +188,7 @@ const Storage = {
 
 
 /* =========================================================
-   RANDOM
+   UTILITIES
    ========================================================= */
 
 function random(min, max) {
@@ -203,10 +216,6 @@ function shuffle(array) {
 }
 
 
-/* =========================================================
-   MONEY
-   ========================================================= */
-
 function formatMoney(value) {
 
   const number = Number(value || 0);
@@ -232,30 +241,29 @@ function formatMoney(value) {
 
 function notify(message, type = "info") {
 
-  let box = $(".r2-toast");
+  let toast = $(".r2-toast");
 
-  if (!box) {
+  if (!toast) {
 
-    box = createElement(
+    toast = createElement(
       "div",
       "r2-toast"
     );
 
-    document.body.appendChild(box);
+    document.body.appendChild(toast);
 
   }
 
-  box.textContent = message;
+  toast.textContent = message;
+  toast.dataset.type = type;
 
-  box.dataset.type = type;
+  toast.classList.add("show");
 
-  box.classList.add("show");
+  clearTimeout(toast._timer);
 
-  clearTimeout(box._timer);
+  toast._timer = setTimeout(() => {
 
-  box._timer = setTimeout(() => {
-
-    box.classList.remove("show");
+    toast.classList.remove("show");
 
   }, 2500);
 
@@ -263,7 +271,7 @@ function notify(message, type = "info") {
 
 
 /* =========================================================
-   SCREEN MANAGEMENT
+   SCREEN SYSTEM
    ========================================================= */
 
 function showScreen(screenName) {
@@ -289,7 +297,6 @@ function showScreen(screenName) {
 
 function goHome() {
 
-  R2.screen = "home";
   R2.mode = null;
 
   showScreen("home");
@@ -313,68 +320,85 @@ function createPlayerCard(player, options = {}) {
 
   }
 
-  const card = createElement(
-    "div",
-    "player-card"
+  const card =
+    createElement(
+      "div",
+      "player-card"
+    );
+
+  card.dataset.playerId =
+    player.id;
+
+  const top =
+    createElement(
+      "div",
+      "player-card-top"
+    );
+
+  top.appendChild(
+    createElement(
+      "strong",
+      "player-rating",
+      String(player.overall)
+    )
   );
 
-  card.dataset.playerId = player.id;
-
-  const top = createElement(
-    "div",
-    "player-card-top"
-  );
-
-  const rating = createElement(
-    "strong",
-    "player-rating",
-    String(player.overall)
-  );
-
-  const position = createElement(
-    "span",
-    "player-position",
-    player.position
-  );
-
-  top.appendChild(rating);
-  top.appendChild(position);
-
-  const name = createElement(
-    "div",
-    "player-name",
-    player.name
-  );
-
-  const posName = createElement(
-    "small",
-    "player-position-name",
-    POSITIONS[player.position] || ""
+  top.appendChild(
+    createElement(
+      "span",
+      "player-position",
+      player.position
+    )
   );
 
   card.appendChild(top);
-  card.appendChild(name);
-  card.appendChild(posName);
+
+  card.appendChild(
+    createElement(
+      "div",
+      "player-name",
+      player.name
+    )
+  );
+
+  card.appendChild(
+    createElement(
+      "small",
+      "player-position-name",
+      POSITIONS[player.position] || ""
+    )
+  );
 
   if (options.price !== undefined) {
 
-    const price = createElement(
-      "div",
-      "player-price",
-      formatMoney(options.price)
+    card.appendChild(
+      createElement(
+        "div",
+        "player-price",
+        formatMoney(options.price)
+      )
     );
-
-    card.appendChild(price);
 
   }
 
   if (options.captain) {
-
     card.classList.add("captain-card");
-
   }
 
   return card;
+
+}
+
+
+/* =========================================================
+   PLAYER LOOKUP
+   ========================================================= */
+
+function findPlayer(id) {
+
+  return PLAYERS.find(
+    player => player.id === id
+  ) || null;
 
 }
 
@@ -390,23 +414,29 @@ function setupNames() {
 
   if (p1) {
 
-    p1.addEventListener("input", event => {
+    p1.addEventListener(
+      "input",
+      event => {
 
-      R2.players.one.name =
-        event.target.value.trim();
+        R2.players.one.name =
+          event.target.value.trim();
 
-    });
+      }
+    );
 
   }
 
   if (p2) {
 
-    p2.addEventListener("input", event => {
+    p2.addEventListener(
+      "input",
+      event => {
 
-      R2.players.two.name =
-        event.target.value.trim();
+        R2.players.two.name =
+          event.target.value.trim();
 
-    });
+      }
+    );
 
   }
 
@@ -414,24 +444,26 @@ function setupNames() {
 
 
 /* =========================================================
-   START GAME
+   RESET GAME
    ========================================================= */
 
-function startGame(mode) {
+function resetGame() {
 
-  R2.mode = mode;
+  R2.players.one = {
+    name: R2.players.one.name,
+    budget: 2000,
+    squad: [],
+    wildCardUsed: false,
+    captain: null
+  };
 
-  R2.players.one.squad = [];
-  R2.players.two.squad = [];
-
-  R2.players.one.budget = 2000;
-  R2.players.two.budget = 2000;
-
-  R2.players.one.wildCardUsed = false;
-  R2.players.two.wildCardUsed = false;
-
-  R2.players.one.captain = null;
-  R2.players.two.captain = null;
+  R2.players.two = {
+    name: R2.players.two.name,
+    budget: 2000,
+    squad: [],
+    wildCardUsed: false,
+    captain: null
+  };
 
   R2.match = {
     scoreOne: 0,
@@ -442,13 +474,25 @@ function startGame(mode) {
     finished: false
   };
 
+}
+
+
+/* =========================================================
+   START GAME
+   ========================================================= */
+
+function startGame(mode) {
+
+  resetGame();
+
+  R2.mode = mode;
+
   if (
     mode === "pro-max" ||
     mode === "five-aside"
   ) {
 
     startAuction(mode);
-
     return;
 
   }
@@ -456,10 +500,14 @@ function startGame(mode) {
   if (mode === "deal") {
 
     startDeal();
-
     return;
 
   }
+
+  notify(
+    "وضع اللعب غير معروف",
+    "error"
+  );
 
 }
 
@@ -475,16 +523,30 @@ function startAuction(mode) {
       ? FORMATIONS.proMax
       : FORMATIONS.fiveAside;
 
+  if (!formation || !HELPERS.createAuctionPool) {
+
+    notify(
+      "بيانات التشكيلة غير موجودة",
+      "error"
+    );
+
+    return;
+
+  }
+
   R2.auction = {
 
-    pool: HELPERS.createAuctionPool(
-      formation,
-      []
-    ),
+    pool:
+      HELPERS.createAuctionPool(
+        formation,
+        []
+      ),
 
     index: 0,
     currentPlayer: null,
-    currentBid: DATA.config.auction.start,
+    currentBid:
+      CONFIG.auction.startPrice || 5,
+
     highestBidder: null,
     finished: false
 
@@ -498,7 +560,7 @@ function startAuction(mode) {
 
 
 /* =========================================================
-   CURRENT AUCTION PLAYER
+   AUCTION CURRENT PLAYER
    ========================================================= */
 
 function getAuctionItem() {
@@ -512,9 +574,12 @@ function getAuctionItem() {
 
 function getAuctionPlayer() {
 
-  const item = getAuctionItem();
+  const item =
+    getAuctionItem();
 
-  return item ? item.player : null;
+  return item
+    ? item.player
+    : null;
 
 }
 
@@ -525,12 +590,12 @@ function getAuctionPlayer() {
 
 function renderAuction() {
 
-  const item = getAuctionItem();
+  const item =
+    getAuctionItem();
 
   if (!item || !item.player) {
 
     finishAuction();
-
     return;
 
   }
@@ -538,22 +603,27 @@ function renderAuction() {
   R2.auction.currentPlayer =
     item.player;
 
-  R2.auction.currentBid = 5;
-  R2.auction.highestBidder = null;
+  R2.auction.currentBid =
+    CONFIG.auction.startPrice || 5;
 
-  const player = item.player;
+  R2.auction.highestBidder =
+    null;
 
-  const cardContainer =
+  const container =
     $("#auctionPlayer");
 
-  if (cardContainer) {
+  if (container) {
 
-    clearElement(cardContainer);
+    clearElement(container);
 
-    cardContainer.appendChild(
-      createPlayerCard(player, {
-        price: R2.auction.currentBid
-      })
+    container.appendChild(
+      createPlayerCard(
+        item.player,
+        {
+          price:
+            R2.auction.currentBid
+        }
+      )
     );
 
   }
@@ -593,12 +663,12 @@ function updateAuctionUI() {
 
   }
 
-  const bid =
+  const currentBid =
     $("#auctionCurrentBid");
 
-  if (bid) {
+  if (currentBid) {
 
-    bid.textContent =
+    currentBid.textContent =
       formatMoney(
         R2.auction.currentBid
       );
@@ -614,15 +684,17 @@ function updateAuctionUI() {
   if (position && item) {
 
     position.textContent =
-      `${item.position} — لاعب ${item.slot}`;
+      `${POSITIONS[item.position] || item.position} — لاعب ${item.slot}`;
 
   }
+
+  renderCurrentAuctionPrice();
 
 }
 
 
 /* =========================================================
-   ADD BID
+   BID
    ========================================================= */
 
 function addBid(playerNumber, amount) {
@@ -641,7 +713,7 @@ function addBid(playerNumber, amount) {
   if (newBid > player.budget) {
 
     notify(
-      "المبلغ أكبر من الميزانية المتاحة",
+      "المبلغ أكبر من ميزانيتك",
       "error"
     );
 
@@ -649,21 +721,21 @@ function addBid(playerNumber, amount) {
 
   }
 
-  R2.auction.currentBid = newBid;
+  R2.auction.currentBid =
+    newBid;
 
   R2.auction.highestBidder =
     playerNumber;
 
   updateAuctionUI();
 
-  renderCurrentAuctionPrice();
+  notify(
+    `${player.name || "اللاعب"} رفع المزايدة إلى ${formatMoney(newBid)}`,
+    "success"
+  );
 
 }
 
-
-/* =========================================================
-   CUSTOM BID
-   ========================================================= */
 
 function submitCustomBid(playerNumber) {
 
@@ -678,10 +750,10 @@ function submitCustomBid(playerNumber) {
         .replace(/[^\d.]/g, "")
     );
 
-  if (!amount || amount < 6) {
+  if (!amount) {
 
     notify(
-      "اكتب مبلغ أكبر من 5 مليون",
+      "اكتب مبلغًا صحيحًا",
       "error"
     );
 
@@ -694,6 +766,8 @@ function submitCustomBid(playerNumber) {
 
   const player =
     R2.players[playerNumber];
+
+  if (!player) return;
 
   if (amount <= current) {
 
@@ -727,13 +801,11 @@ function submitCustomBid(playerNumber) {
 
   updateAuctionUI();
 
-  renderCurrentAuctionPrice();
-
 }
 
 
 /* =========================================================
-   CURRENT PRICE
+   RENDER PRICE
    ========================================================= */
 
 function renderCurrentAuctionPrice() {
@@ -764,49 +836,6 @@ function renderCurrentAuctionPrice() {
 
 
 /* =========================================================
-   GIVE PLAYER TO OPPONENT
-   ========================================================= */
-
-function givePlayerToOpponent(playerNumber) {
-
-  const player =
-    getAuctionPlayer();
-
-  if (!player) return;
-
-  const opponent =
-    playerNumber === "one"
-      ? "two"
-      : "one";
-
-  const bidder =
-    R2.players[playerNumber];
-
-  const receiver =
-    R2.players[opponent];
-
-  const price =
-    R2.auction.currentBid;
-
-  if (bidder.budget >= price) {
-
-    bidder.budget -= price;
-
-  }
-
-  receiver.squad.push(player);
-
-  notify(
-    `${receiver.name || "الخصم"} حصل على ${player.name}`,
-    "success"
-  );
-
-  nextAuctionPlayer();
-
-}
-
-
-/* =========================================================
    AUCTION PASS
    ========================================================= */
 
@@ -823,7 +852,7 @@ function passAuction() {
   if (!bidder) {
 
     notify(
-      "لا يوجد لاعب قام بالمزايدة",
+      "لم يقم أي لاعب بالمزايدة",
       "error"
     );
 
@@ -831,20 +860,29 @@ function passAuction() {
 
   }
 
-  const opponent =
-    bidder === "one"
-      ? "two"
-      : "one";
+  const buyer =
+    R2.players[bidder];
 
-  R2.players[bidder].budget -=
+  const price =
     R2.auction.currentBid;
 
-  R2.players[bidder].squad.push(
-    player
-  );
+  if (price > buyer.budget) {
+
+    notify(
+      "الميزانية غير كافية",
+      "error"
+    );
+
+    return;
+
+  }
+
+  buyer.budget -= price;
+
+  buyer.squad.push(player);
 
   notify(
-    `${R2.players[bidder].name || "اللاعب"} حصل على ${player.name}`,
+    `${buyer.name || "اللاعب"} حصل على ${player.name}`,
     "success"
   );
 
@@ -854,7 +892,46 @@ function passAuction() {
 
 
 /* =========================================================
-   NEXT AUCTION PLAYER
+   DIRECT GIVE
+   ========================================================= */
+
+function givePlayerToOpponent(playerNumber) {
+
+  const player =
+    getAuctionPlayer();
+
+  if (!player) return;
+
+  const receiver =
+    R2.players[playerNumber];
+
+  if (!receiver) return;
+
+  const price =
+    R2.auction.currentBid;
+
+  if (receiver.budget < price) {
+
+    notify(
+      "الميزانية غير كافية",
+      "error"
+    );
+
+    return;
+
+  }
+
+  receiver.budget -= price;
+
+  receiver.squad.push(player);
+
+  nextAuctionPlayer();
+
+}
+
+
+/* =========================================================
+   NEXT AUCTION
    ========================================================= */
 
 function nextAuctionPlayer() {
@@ -867,7 +944,6 @@ function nextAuctionPlayer() {
   ) {
 
     finishAuction();
-
     return;
 
   }
@@ -883,17 +959,18 @@ function nextAuctionPlayer() {
 
 function finishAuction() {
 
-  R2.auction.finished = true;
-
-  showScreen("wildcard");
+  R2.auction.finished =
+    true;
 
   renderWildcardScreen();
+
+  showScreen("wildcard");
 
 }
 
 
 /* =========================================================
-   WILD CARD
+   WILDCARD
    ========================================================= */
 
 function renderWildcardScreen() {
@@ -924,17 +1001,17 @@ function renderWildcardScreen() {
 
 
 /* =========================================================
-   APPLY WILD CARD
+   WILDCARD
    ========================================================= */
 
 function useWildcard(playerNumber, playerId) {
 
-  const player =
+  const team =
     R2.players[playerNumber];
 
-  if (!player) return;
+  if (!team) return;
 
-  if (player.wildCardUsed) {
+  if (team.wildCardUsed) {
 
     notify(
       "لقد استخدمت الـ Wild Card بالفعل",
@@ -946,14 +1023,16 @@ function useWildcard(playerNumber, playerId) {
   }
 
   const index =
-    player.squad.findIndex(
-      item => item && item.id === playerId
+    team.squad.findIndex(
+      player =>
+        player &&
+        player.id === playerId
     );
 
   if (index === -1) {
 
     notify(
-      "هذا اللاعب غير موجود في التشكيلة",
+      "اللاعب غير موجود",
       "error"
     );
 
@@ -961,7 +1040,8 @@ function useWildcard(playerNumber, playerId) {
 
   }
 
-  player.wildCardUsed = true;
+  team.wildCardUsed =
+    true;
 
   notify(
     "تم استخدام الـ Wild Card",
@@ -979,56 +1059,65 @@ function renderCaptainSelection() {
 
   showScreen("captain");
 
-  const one =
-    $("#captainTeamOne");
+  renderCaptainTeam(
+    "one",
+    $("#captainTeamOne")
+  );
 
-  const two =
-    $("#captainTeamTwo");
-
-  if (one) {
-
-    clearElement(one);
-
-    R2.players.one.squad.forEach(player => {
-
-      const card =
-        createPlayerCard(player);
-
-      card.addEventListener(
-        "click",
-        () => chooseCaptain("one", player)
-      );
-
-      one.appendChild(card);
-
-    });
-
-  }
-
-  if (two) {
-
-    clearElement(two);
-
-    R2.players.two.squad.forEach(player => {
-
-      const card =
-        createPlayerCard(player);
-
-      card.addEventListener(
-        "click",
-        () => chooseCaptain("two", player)
-      );
-
-      two.appendChild(card);
-
-    });
-
-  }
+  renderCaptainTeam(
+    "two",
+    $("#captainTeamTwo")
+  );
 
 }
 
 
-function chooseCaptain(playerNumber, player) {
+function renderCaptainTeam(
+  playerNumber,
+  container
+) {
+
+  if (!container) return;
+
+  clearElement(container);
+
+  const team =
+    R2.players[playerNumber];
+
+  team.squad.forEach(player => {
+
+    const card =
+      createPlayerCard(
+        player,
+        {
+          captain:
+            team.captain &&
+            team.captain.id === player.id
+        }
+      );
+
+    card.addEventListener(
+      "click",
+      () =>
+        chooseCaptain(
+          playerNumber,
+          player
+        )
+    );
+
+    container.appendChild(card);
+
+  });
+
+}
+
+
+function chooseCaptain(
+  playerNumber,
+  player
+) {
+
+  if (!player) return;
 
   R2.players[playerNumber].captain =
     player;
@@ -1038,12 +1127,17 @@ function chooseCaptain(playerNumber, player) {
     "success"
   );
 
+  renderCaptainSelection();
+
   if (
     R2.players.one.captain &&
     R2.players.two.captain
   ) {
 
-    simulateMatch();
+    setTimeout(
+      simulateMatch,
+      400
+    );
 
   }
 
@@ -1072,8 +1166,7 @@ function startDeal() {
     opened: [],
     attempts: 1,
     playerOneChoice: null,
-    playerTwoChoice: null,
-    roundFinished: false
+    playerTwoChoice: null
 
   };
 
@@ -1095,23 +1188,26 @@ function startDealRound() {
   if (!position) {
 
     finishDeal();
-
     return;
 
   }
 
-  const used = [
+  const usedIds = [
+
     ...R2.players.one.squad,
     ...R2.players.two.squad
+
   ]
     .filter(Boolean)
     .map(player => player.id);
 
   R2.deal.boxes =
-    HELPERS.createDealBoxes(
-      position,
-      used
-    );
+    HELPERS.createDealBoxes
+      ? HELPERS.createDealBoxes(
+          position,
+          usedIds
+        )
+      : [];
 
   R2.deal.opened = [];
 
@@ -1121,10 +1217,6 @@ function startDealRound() {
 
 }
 
-
-/* =========================================================
-   RENDER DEAL ROUND
-   ========================================================= */
 
 function renderDealRound() {
 
@@ -1139,16 +1231,16 @@ function renderDealRound() {
   if (title) {
 
     title.textContent =
-      `${position} — ${POSITIONS[position]}`;
+      `${POSITIONS[position] || position}`;
 
   }
 
-  const boxContainer =
+  const container =
     $("#dealBoxes");
 
-  if (!boxContainer) return;
+  if (!container) return;
 
-  clearElement(boxContainer);
+  clearElement(container);
 
   R2.deal.boxes.forEach(box => {
 
@@ -1161,23 +1253,24 @@ function renderDealRound() {
 
     button.addEventListener(
       "click",
-      () => openDealBox(box.boxNumber)
+      () =>
+        openDealBox(
+          box.boxNumber
+        )
     );
 
-    boxContainer.appendChild(button);
+    container.appendChild(button);
 
   });
 
 }
 
 
-/* =========================================================
-   OPEN DEAL BOX
-   ========================================================= */
-
 function openDealBox(boxNumber) {
 
-  if (R2.deal.opened.length >= 2) {
+  if (
+    R2.deal.opened.length >= 2
+  ) {
 
     notify(
       "مسموح بفتح بوكسين فقط",
@@ -1212,41 +1305,72 @@ function openDealBox(boxNumber) {
     boxNumber
   );
 
-  renderDealOpenedBox(box);
+  renderDealRound();
 
-}
+  R2.deal.opened.forEach(number => {
 
+    const opened =
+      R2.deal.boxes.find(
+        box =>
+          box.boxNumber === number
+      );
 
-function renderDealOpenedBox(box) {
+    if (!opened) return;
 
-  const button =
-    document.querySelector(
-      `.deal-box:nth-child(${box.boxNumber})`
+    const button =
+      document.querySelector(
+        `.deal-box:nth-child(${number})`
+      );
+
+    if (!button) return;
+
+    button.classList.add("opened");
+
+    clearElement(button);
+
+    button.appendChild(
+      createPlayerCard(
+        opened.player
+      )
     );
 
-  if (!button) return;
-
-  button.classList.add("opened");
-
-  clearElement(button);
-
-  button.appendChild(
-    createPlayerCard(box.player)
-  );
+  });
 
 }
 
 
 /* =========================================================
-   DEAL / NO DEAL
+   DEAL CHOICE
    ========================================================= */
 
-function dealChoice(playerNumber, choice) {
+function getLastOpenedPlayer() {
 
-  const openedBoxes =
-    R2.deal.opened;
+  const last =
+    R2.deal.opened[
+      R2.deal.opened.length - 1
+    ];
 
-  if (openedBoxes.length < 2) {
+  const box =
+    R2.deal.boxes.find(
+      item =>
+        item.boxNumber === last
+    );
+
+  return box
+    ? box.player
+    : null;
+
+}
+
+
+function dealChoice(
+  playerNumber,
+  choice
+) {
+
+  if (
+    R2.deal.opened.length < 2
+  ) {
 
     notify(
       "افتح بوكسين أولًا",
@@ -1257,48 +1381,46 @@ function dealChoice(playerNumber, choice) {
 
   }
 
-  const selected =
-    R2.deal.boxes.find(
-      box =>
-        box.boxNumber ===
-        openedBoxes[
-          openedBoxes.length - 1
-        ]
-    );
+  const player =
+    getLastOpenedPlayer();
 
-  if (!selected) return;
+  if (!player) return;
 
   if (choice === "DEAL") {
 
     R2.players[playerNumber].squad.push(
-      selected.player
+      player
     );
 
     if (playerNumber === "one") {
 
       R2.deal.playerOneChoice =
-        selected.player;
+        player;
 
     } else {
 
       R2.deal.playerTwoChoice =
-        selected.player;
+        player;
 
     }
 
     notify(
-      `${selected.player.name} تم اختياره`,
+      `${player.name} انضم إلى التشكيلة`,
       "success"
     );
+
+    return;
 
   }
 
   if (choice === "NO DEAL") {
 
-    if (R2.deal.attempts >= 2) {
+    if (
+      R2.deal.attempts >= 2
+    ) {
 
       notify(
-        "هذه هي المحاولة الأخيرة ولا يمكن الرفض",
+        "هذه آخر محاولة",
         "error"
       );
 
@@ -1307,11 +1429,6 @@ function dealChoice(playerNumber, choice) {
     }
 
     R2.deal.attempts++;
-
-    notify(
-      "تم الانتقال للمحاولة الثانية",
-      "info"
-    );
 
     startDealRound();
 
@@ -1326,15 +1443,15 @@ function dealChoice(playerNumber, choice) {
 
 function finishDeal() {
 
-  showScreen("wildcard");
-
   renderWildcardScreen();
+
+  showScreen("wildcard");
 
 }
 
 
 /* =========================================================
-   AI DIFFICULTY
+   AI
    ========================================================= */
 
 const AI_LEVELS = {
@@ -1372,7 +1489,7 @@ const AI_LEVELS = {
   legendary: {
     name: "أسطوري",
     accuracy: 0.94,
-    aggression: 0.9
+    aggression: 0.90
   }
 
 };
@@ -1384,35 +1501,32 @@ const AI_LEVELS = {
 
 function teamStrength(team) {
 
-  if (!team || !team.length) {
+  const players =
+    (team || []).filter(Boolean);
 
+  if (!players.length) {
     return 0;
-
   }
 
-  let total = 0;
+  const total =
+    players.reduce(
+      (sum, player) =>
+        sum +
+        Number(
+          player.overall || 0
+        ),
+      0
+    );
 
-  let count = 0;
-
-  team.forEach(player => {
-
-    if (!player) return;
-
-    total +=
-      Number(player.overall || 0);
-
-    count++;
-
-  });
-
-  return count
-    ? total / count
-    : 0;
+  return total / players.length;
 
 }
 
 
-function captainBonus(team, captain) {
+function captainBonus(
+  team,
+  captain
+) {
 
   if (!captain) return 0;
 
@@ -1422,20 +1536,20 @@ function captainBonus(team, captain) {
   if (!base) return 0;
 
   return (
-    Number(captain.overall || 0) -
-    base
+    Number(captain.overall || 0)
+    - base
   ) * 0.05;
 
 }
 
 
 /* =========================================================
-   MATCH SIMULATION
+   MATCH
    ========================================================= */
 
 function simulateMatch() {
 
-  const teamOne =
+  const strengthOne =
     teamStrength(
       R2.players.one.squad
     ) +
@@ -1444,7 +1558,7 @@ function simulateMatch() {
       R2.players.one.captain
     );
 
-  const teamTwo =
+  const strengthTwo =
     teamStrength(
       R2.players.two.squad
     ) +
@@ -1453,22 +1567,16 @@ function simulateMatch() {
       R2.players.two.captain
     );
 
-  const difference =
-    teamOne - teamTwo;
-
   let scoreOne =
     random(0, 3);
 
   let scoreTwo =
     random(0, 3);
 
-  const advantage =
-    Math.max(
-      -2,
-      Math.min(2, difference / 5)
-    );
+  const difference =
+    strengthOne - strengthTwo;
 
-  if (advantage > 0) {
+  if (difference > 8) {
 
     scoreOne =
       Math.max(
@@ -1479,7 +1587,7 @@ function simulateMatch() {
 
   }
 
-  if (advantage < 0) {
+  if (difference < -8) {
 
     scoreTwo =
       Math.max(
@@ -1492,17 +1600,13 @@ function simulateMatch() {
 
   if (
     scoreOne === scoreTwo &&
-    Math.abs(difference) >= 8
+    Math.abs(difference) >= 15
   ) {
 
     if (difference > 0) {
-
       scoreOne++;
-
     } else {
-
       scoreTwo++;
-
     }
 
   }
@@ -1541,7 +1645,8 @@ function simulateMatch() {
 
   }
 
-  R2.match.finished = true;
+  R2.match.finished =
+    true;
 
   renderMatchResult();
 
@@ -1554,21 +1659,19 @@ function simulateMatch() {
 
 function getAttackingPlayers(team) {
 
-  return team.filter(player => {
-
-    if (!player) return false;
-
-    return [
-      "CAM",
-      "RW",
-      "LW",
-      "ST",
-      "CM"
-    ].includes(
-      player.position
-    );
-
-  });
+  return (team || []).filter(
+    player =>
+      player &&
+      [
+        "CAM",
+        "RW",
+        "LW",
+        "ST",
+        "CM"
+      ].includes(
+        player.position
+      )
+  );
 
 }
 
@@ -1576,13 +1679,14 @@ function getAttackingPlayers(team) {
 function pickRandomPlayer(team) {
 
   if (!team.length) {
-
     return null;
-
   }
 
   return team[
-    random(0, team.length - 1)
+    random(
+      0,
+      team.length - 1
+    )
   ];
 
 }
@@ -1598,12 +1702,12 @@ function generateMatchEvents(
   const totalGoals =
     scoreOne + scoreTwo;
 
-  const teamOneAttack =
+  const attackOne =
     getAttackingPlayers(
       R2.players.one.squad
     );
 
-  const teamTwoAttack =
+  const attackTwo =
     getAttackingPlayers(
       R2.players.two.squad
     );
@@ -1614,9 +1718,6 @@ function generateMatchEvents(
     i++
   ) {
 
-    const minute =
-      random(3, 90);
-
     const team =
       i < scoreOne
         ? "one"
@@ -1624,56 +1725,57 @@ function generateMatchEvents(
 
     const attackers =
       team === "one"
-        ? teamOneAttack
-        : teamTwoAttack;
+        ? attackOne
+        : attackTwo;
 
-    const player =
+    const scorer =
       pickRandomPlayer(
         attackers
       );
 
-    const teamAll =
+    const allPlayers =
       team === "one"
         ? R2.players.one.squad
         : R2.players.two.squad;
 
-    const possibleAssists =
-      teamAll.filter(
-        p =>
-          p &&
-          p.id !==
-          player?.id &&
+    const assistCandidates =
+      allPlayers.filter(
+        player =>
+          player &&
+          (!scorer ||
+            player.id !== scorer.id) &&
           [
             "CAM",
             "RW",
             "LW",
             "CM"
           ].includes(
-            p.position
+            player.position
           )
       );
 
     const assist =
       chance(75)
         ? pickRandomPlayer(
-            possibleAssists
+            assistCandidates
           )
         : null;
 
     events.push({
 
-      minute,
+      minute:
+        random(3, 90),
 
       team,
 
       scorer:
-        player
-          ? player.name
-          : "هدف عشوائي",
+        scorer
+          ? scorer.name
+          : "هدف",
 
       scorerId:
-        player
-          ? player.id
+        scorer
+          ? scorer.id
           : null,
 
       assist:
@@ -1704,47 +1806,47 @@ function generateMatchEvents(
 
 function calculatePlayerOfMatch() {
 
-  const candidates = [
+  const players = [
 
     ...R2.players.one.squad,
     ...R2.players.two.squad
 
   ].filter(Boolean);
 
-  if (!candidates.length) {
-
+  if (!players.length) {
     return null;
-
   }
 
   let best =
-    candidates[0];
+    players[0];
 
   let bestScore =
     Number(best.overall || 0);
 
   R2.match.events.forEach(event => {
 
+    if (!event.scorerId) {
+      return;
+    }
+
     const player =
-      candidates.find(
-        p =>
-          p.id ===
+      players.find(
+        item =>
+          item.id ===
           event.scorerId
       );
 
-    if (player) {
+    if (!player) {
+      return;
+    }
 
-      const score =
-        Number(player.overall || 0)
-        + 6;
+    const score =
+      Number(player.overall || 0) + 6;
 
-      if (score > bestScore) {
+    if (score > bestScore) {
 
-        best = player;
-
-        bestScore = score;
-
-      }
+      best = player;
+      bestScore = score;
 
     }
 
@@ -1788,10 +1890,6 @@ function renderMatchResult() {
 }
 
 
-/* =========================================================
-   MATCH STATISTICS
-   ========================================================= */
-
 function renderMatchStatistics() {
 
   const container =
@@ -1801,36 +1899,27 @@ function renderMatchStatistics() {
 
   clearElement(container);
 
-  const title =
+  container.appendChild(
     createElement(
       "h3",
       "",
       "إحصائيات المباراة"
-    );
+    )
+  );
 
-  container.appendChild(title);
-
-  if (
-    !R2.match.events.length
-  ) {
+  if (!R2.match.events.length) {
 
     container.appendChild(
       createElement(
         "p",
         "",
-        "لم يتم تسجيل أهداف في المباراة."
+        "لم يتم تسجيل أهداف."
       )
     );
 
   }
 
   R2.match.events.forEach(event => {
-
-    const row =
-      createElement(
-        "div",
-        "match-event"
-      );
 
     let text =
       `${event.minute}' ⚽ ${event.scorer}`;
@@ -1842,25 +1931,25 @@ function renderMatchStatistics() {
 
     }
 
-    row.textContent =
-      text;
-
-    container.appendChild(row);
+    container.appendChild(
+      createElement(
+        "div",
+        "match-event",
+        text
+      )
+    );
 
   });
 
-  if (
-    R2.match.playerOfMatch
-  ) {
+  if (R2.match.playerOfMatch) {
 
-    const motm =
+    container.appendChild(
       createElement(
         "div",
         "player-of-match",
         `⭐ رجل المباراة: ${R2.match.playerOfMatch.name}`
-      );
-
-    container.appendChild(motm);
+      )
+    );
 
   }
 
@@ -1868,19 +1957,20 @@ function renderMatchStatistics() {
 
 
 /* =========================================================
-   SHARE RESULT
+   SHARE
    ========================================================= */
 
 function shareResult() {
 
   const text =
-    `نتيجة مباراة R2 Football Games: ` +
-    `${R2.match.scoreOne} - ${R2.match.scoreTwo}\n` +
+    `R2 Football Games\n` +
+    `${R2.players.one.name || "اللاعب 1"} ` +
+    `${R2.match.scoreOne} - ` +
+    `${R2.match.scoreTwo} ` +
+    `${R2.players.two.name || "اللاعب 2"}\n` +
     `الفائز: ${R2.match.winner}`;
 
-  if (
-    navigator.share
-  ) {
+  if (navigator.share) {
 
     navigator.share({
       title:
@@ -1892,16 +1982,12 @@ function shareResult() {
 
   }
 
-  if (
-    navigator.clipboard
-  ) {
+  if (navigator.clipboard) {
 
-    navigator.clipboard.writeText(
-      text
-    );
+    navigator.clipboard.writeText(text);
 
     notify(
-      "تم نسخ النتيجة للمشاركة",
+      "تم نسخ النتيجة",
       "success"
     );
 
@@ -1911,7 +1997,7 @@ function shareResult() {
 
 
 /* =========================================================
-   ONLINE ROOM
+   ONLINE
    ========================================================= */
 
 function generateRoomCode() {
@@ -1919,11 +2005,14 @@ function generateRoomCode() {
   const chars =
     "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
+  const length =
+    CONFIG.onlineRoom.codeLength || 6;
+
   let code = "";
 
   for (
     let i = 0;
-    i < DATA.config.onlineRoom.codeLength;
+    i < length;
     i++
   ) {
 
@@ -1950,10 +2039,10 @@ function createOnlineRoom() {
   R2.online.roomCode =
     code;
 
-  R2.online.connected =
+  R2.online.host =
     true;
 
-  R2.online.host =
+  R2.online.connected =
     true;
 
   Storage.set(
@@ -1961,20 +2050,27 @@ function createOnlineRoom() {
     code
   );
 
-  notify(
-    `تم إنشاء الغرفة: ${code}`,
-    "success"
-  );
+  if (
+    window.R2_ONLINE &&
+    typeof window.R2_ONLINE.createRoom ===
+      "function"
+  ) {
+
+    window.R2_ONLINE.createRoom(code);
+
+  }
 
   const field =
     $("#roomCode");
 
   if (field) {
-
-    field.value =
-      code;
-
+    field.value = code;
   }
+
+  notify(
+    `تم إنشاء الغرفة ${code}`,
+    "success"
+  );
 
 }
 
@@ -1986,10 +2082,10 @@ function joinOnlineRoom(code) {
       .trim()
       .toUpperCase();
 
-  if (
-    clean.length !==
-    DATA.config.onlineRoom.codeLength
-  ) {
+  const length =
+    CONFIG.onlineRoom.codeLength || 6;
+
+  if (clean.length !== length) {
 
     notify(
       "كود الغرفة غير صحيح",
@@ -2003,11 +2099,21 @@ function joinOnlineRoom(code) {
   R2.online.roomCode =
     clean;
 
+  R2.online.host =
+    false;
+
   R2.online.connected =
     true;
 
-  R2.online.host =
-    false;
+  if (
+    window.R2_ONLINE &&
+    typeof window.R2_ONLINE.joinRoom ===
+      "function"
+  ) {
+
+    window.R2_ONLINE.joinRoom(clean);
+
+  }
 
   notify(
     `تم الانضمام إلى الغرفة ${clean}`,
@@ -2018,16 +2124,109 @@ function joinOnlineRoom(code) {
 
 
 /* =========================================================
+   ONLINE MESSAGE BRIDGE
+   ========================================================= */
+
+function sendOnlineMessage(type, data = {}) {
+
+  if (
+    window.R2_ONLINE &&
+    typeof window.R2_ONLINE.send ===
+      "function"
+  ) {
+
+    window.R2_ONLINE.send({
+      type,
+      data
+    });
+
+    return true;
+
+  }
+
+  return false;
+
+}
+
+
+window.addEventListener(
+  "r2-online-message",
+  event => {
+
+    const message =
+      event.detail;
+
+    if (!message) return;
+
+    handleOnlineMessage(
+      message
+    );
+
+  }
+);
+
+
+function handleOnlineMessage(message) {
+
+  if (!message.type) {
+    return;
+  }
+
+  if (
+    message.type === "room-created"
+  ) {
+
+    R2.online.connected = true;
+
+  }
+
+  if (
+    message.type === "room-joined"
+  ) {
+
+    R2.online.connected = true;
+
+  }
+
+  if (
+    message.type === "player-name"
+  ) {
+
+    if (message.data?.name) {
+
+      R2.players.two.name =
+        message.data.name;
+
+    }
+
+  }
+
+  if (
+    message.type === "ping"
+  ) {
+
+    sendOnlineMessage(
+      "pong"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    FRIEND SYSTEM
    ========================================================= */
 
 function generateFriendId() {
 
+  const length =
+    CONFIG.friendId.length || 16;
+
   let id = "";
 
   while (
-    id.length <
-    DATA.config.friendId.length
+    id.length < length
   ) {
 
     id +=
@@ -2072,13 +2271,13 @@ function sendFriendRequest(friendId) {
     String(friendId || "")
       .replace(/\D/g, "");
 
-  if (
-    clean.length !==
-    DATA.config.friendId.length
-  ) {
+  const length =
+    CONFIG.friendId.length || 16;
+
+  if (clean.length !== length) {
 
     notify(
-      "معرف الصديق يجب أن يكون 16 رقم",
+      `معرف الصديق يجب أن يكون ${length} رقم`,
       "error"
     );
 
@@ -2100,15 +2299,17 @@ function sendFriendRequest(friendId) {
 
 const SETTINGS = {
 
-  volume: Storage.get(
-    "r2-volume",
-    70
-  ),
+  volume:
+    Storage.get(
+      "r2-volume",
+      70
+    ),
 
-  difficulty: Storage.get(
-    "r2-difficulty",
-    "professional"
-  )
+  difficulty:
+    Storage.get(
+      "r2-difficulty",
+      "professional"
+    )
 
 };
 
@@ -2123,27 +2324,13 @@ function setVolume(value) {
     SETTINGS.volume
   );
 
-  const audio =
-    $("#siteVolume");
-
-  if (audio) {
-
-    audio.value =
-      SETTINGS.volume;
-
-  }
-
 }
 
 
 function setDifficulty(value) {
 
-  if (
-    !AI_LEVELS[value]
-  ) {
-
+  if (!AI_LEVELS[value]) {
     return;
-
   }
 
   SETTINGS.difficulty =
@@ -2163,7 +2350,7 @@ function setDifficulty(value) {
 
 
 /* =========================================================
-   EVENT SYSTEM
+   EVENTS
    ========================================================= */
 
 function renderEvents() {
@@ -2176,16 +2363,29 @@ function renderEvents() {
   clearElement(container);
 
   const event =
-    DATA.events.spanishLeague;
+    DATA.events?.spanishLeague;
 
-  const title =
+  if (!event) {
+
+    container.appendChild(
+      createElement(
+        "p",
+        "",
+        "لا توجد أحداث حاليًا."
+      )
+    );
+
+    return;
+
+  }
+
+  container.appendChild(
     createElement(
       "h2",
       "",
       event.title
-    );
-
-  container.appendChild(title);
+    )
+  );
 
   event.weeks.forEach(week => {
 
@@ -2195,14 +2395,13 @@ function renderEvents() {
         "event-week"
       );
 
-    const heading =
+    item.appendChild(
       createElement(
         "h3",
         "",
         `${week.title} — ${week.status}`
-      );
-
-    item.appendChild(heading);
+      )
+    );
 
     if (week.active) {
 
@@ -2235,17 +2434,16 @@ function renderEvents() {
 function openEventWeek(weekNumber) {
 
   const week =
-    HELPERS.getEventWeek(
-      weekNumber
-    );
+    HELPERS.getEventWeek
+      ? HELPERS.getEventWeek(
+          weekNumber
+        )
+      : null;
 
-  if (
-    !week ||
-    !week.active
-  ) {
+  if (!week || !week.active) {
 
     notify(
-      "هذا الأسبوع غير متاح حاليًا",
+      "هذا الأسبوع غير متاح",
       "error"
     );
 
@@ -2262,19 +2460,23 @@ function openEventWeek(weekNumber) {
 
   clearElement(container);
 
-  week.players.forEach(player => {
+  week.players.forEach(
+    player => {
 
-    container.appendChild(
-      createPlayerCard(player)
-    );
+      container.appendChild(
+        createPlayerCard(
+          player
+        )
+      );
 
-  });
+    }
+  );
 
 }
 
 
 /* =========================================================
-   HOME BUTTONS
+   BUTTON BINDING
    ========================================================= */
 
 function bindButtons() {
@@ -2369,12 +2571,12 @@ function bindButtons() {
   }
 
 
-  const resultShare =
+  const share =
     $("#shareResult");
 
-  if (resultShare) {
+  if (share) {
 
-    resultShare.addEventListener(
+    share.addEventListener(
       "click",
       shareResult
     );
@@ -2382,12 +2584,12 @@ function bindButtons() {
   }
 
 
-  const roomCreate =
+  const createRoom =
     $("#createRoom");
 
-  if (roomCreate) {
+  if (createRoom) {
 
-    roomCreate.addEventListener(
+    createRoom.addEventListener(
       "click",
       createOnlineRoom
     );
@@ -2395,21 +2597,21 @@ function bindButtons() {
   }
 
 
-  const roomJoin =
+  const joinRoom =
     $("#joinRoom");
 
-  if (roomJoin) {
+  if (joinRoom) {
 
-    roomJoin.addEventListener(
+    joinRoom.addEventListener(
       "click",
       () => {
 
-        const code =
+        const input =
           $("#roomCodeInput");
 
         joinOnlineRoom(
-          code
-            ? code.value
+          input
+            ? input.value
             : ""
         );
 
@@ -2419,12 +2621,12 @@ function bindButtons() {
   }
 
 
-  const friendSend =
+  const friendButton =
     $("#sendFriendRequest");
 
-  if (friendSend) {
+  if (friendButton) {
 
-    friendSend.addEventListener(
+    friendButton.addEventListener(
       "click",
       () => {
 
@@ -2555,12 +2757,12 @@ function bindButtons() {
   }
 
 
-  const dealButton =
+  const deal =
     $("#dealButton");
 
-  if (dealButton) {
+  if (deal) {
 
-    dealButton.addEventListener(
+    deal.addEventListener(
       "click",
       () =>
         dealChoice(
@@ -2572,12 +2774,12 @@ function bindButtons() {
   }
 
 
-  const noDealButton =
+  const noDeal =
     $("#noDealButton");
 
-  if (noDealButton) {
+  if (noDeal) {
 
-    noDealButton.addEventListener(
+    noDeal.addEventListener(
       "click",
       () =>
         dealChoice(
@@ -2589,17 +2791,16 @@ function bindButtons() {
   }
 
 
-  const finishRound =
+  const finishDeal =
     $("#finishDealRound");
 
-  if (finishRound) {
+  if (finishDeal) {
 
-    finishRound.addEventListener(
+    finishDeal.addEventListener(
       "click",
       () => {
 
         R2.deal.positionIndex++;
-
         R2.deal.attempts = 1;
 
         startDealRound();
@@ -2613,28 +2814,22 @@ function bindButtons() {
 
 
 /* =========================================================
-   INITIALIZATION
+   INITIALIZE
    ========================================================= */
 
 function initializeApp() {
 
   console.log(
-    "R2 Football Games — App initialized"
+    "⚽ R2 Football Games — App initialized"
   );
 
   console.log(
     `Players loaded: ${PLAYERS.length}`
   );
 
-  console.log(
-    "Pro Max:",
-    FORMATIONS.proMax
-  );
+  setupNames();
 
-  console.log(
-    "Five Aside:",
-    FORMATIONS.fiveAside
-  );
+  bindButtons();
 
   const friendId =
     $("#myFriendId");
@@ -2645,10 +2840,6 @@ function initializeApp() {
       getMyFriendId();
 
   }
-
-  setupNames();
-
-  bindButtons();
 
   showScreen("home");
 
@@ -2685,43 +2876,47 @@ window.R2_APP = {
   state: R2,
 
   startGame,
+  resetGame,
 
   startAuction,
-
-  startDeal,
-
   addBid,
-
   submitCustomBid,
-
   passAuction,
-
   givePlayerToOpponent,
 
-  useWildcard,
+  startDeal,
+  openDealBox,
+  dealChoice,
 
+  useWildcard,
   chooseCaptain,
 
   simulateMatch,
-
   shareResult,
 
   createOnlineRoom,
-
   joinOnlineRoom,
+  sendOnlineMessage,
 
   getMyFriendId,
-
   sendFriendRequest,
 
   setVolume,
-
   setDifficulty,
 
   renderEvents,
-
   openEventWeek,
 
+  showScreen,
   goHome
 
 };
+
+
+/* =========================================================
+   FINAL CHECK
+   ========================================================= */
+
+console.log(
+  `R2 APP READY — ${PLAYERS.length} players available`
+);
