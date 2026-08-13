@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#050914"
+  >
+
+  <meta
+    name="description"
+    content="R2 Football Games - مزاد برو ماكس، الملعب الخماسي، Deal or No Deal، الروبوت والغرف الأونلاين."
+  >
+
+  <title>R2 Football Games</title>
+
+  <!-- ================================
+       GOOGLE FONT
+       ================================ -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- ================================
+       MAIN CSS
+       ================================ -->
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+</head>
+
+
+<body>
+
+  <!-- =========================================================
+       APPLICATION
+       ========================================================= -->
+
+  <div id="app">
+
+
+    <!-- =======================================================
+         TOP NAVBAR
+         ======================================================= -->
+
+    <header class="topbar">
+
+      <!-- RIGHT SIDE -->
+
+      <div class="topbar-right">
+
+        <button
+          id="friendsBtn"
+          class="nav-btn"
+          type="button"
+          data-action="friends"
+        >
+          <span class="nav-btn-icon">👥</span>
+          <span>الأصدقاء</span>
+        </button>
+
+
+        <button
+          id="inboxBtn"
+          class="nav-btn"
+          type="button"
+          data-action="inbox"
+        >
+          <span class="nav-btn-icon">✉️</span>
+          <span>البريد الوارد</span>
+
+          <span
+            id="inboxBadge"
+            class="badge hidden"
+          >
+            0
+          </span>
+        </button>
+
+      </div>
+
+
+      <!-- CENTER BRAND -->
+
+      <button
+        class="brand"
+        type="button"
+        data-action="home"
+        aria-label="R2 Football Games"
+      >
+
+        <div class="brand-mark">
+
+          <span>R</span>
+
+          <strong>2</strong>
+
+        </div>
+
+
+        <div class="brand-text">
+
+          <h1>R2</h1>
+
+          <span>FOOTBALL GAMES</span>
+
+        </div>
+
+      </button>
+
+
+      <!-- LEFT SIDE -->
+
+      <div class="topbar-left">
+
+        <button
+          id="eventsBtn"
+          class="nav-btn"
+          type="button"
+          data-action="events"
+        >
+          <span class="nav-btn-icon">🏆</span>
+          <span>الأحداث</span>
+        </button>
+
+
+        <button
+          id="settingsBtn"
+          class="nav-btn icon-btn"
+          type="button"
+          data-action="settings"
+          aria-label="الإعدادات"
+        >
+          ⚙️
+        </button>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- =======================================================
+         MAIN CONTENT
+         ======================================================= -->
+
+    <main id="mainContent">
+
+
+      <!-- =====================================================
+           HOME PAGE
+           ===================================================== -->
+
+      <section
+        id="homePage"
+        class="page active"
+      >
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+          <div class="hero-background-grid"></div>
+
+          <div class="hero-glow hero-glow-one"></div>
+
+          <div class="hero-glow hero-glow-two"></div>
+
+          <div class="hero-glow hero-glow-three"></div>
+
+
+          <div class="hero-content">
+
+
+            <div class="hero-logo">
+
+              <div class="hero-r2">
+
+                <span>R</span>
+
+                <strong>2</strong>
+
+              </div>
+
+              <span class="hero-logo-subtitle">
+                FOOTBALL GAMES
+              </span>
+
+            </div>
+
+
+            <div class="hero-copy">
+
+              <span class="eyebrow">
+                ⚽ THE ULTIMATE FOOTBALL CHALLENGE
+              </span>
+
+
+              <h2>
+                العبها بطريقتك...
+                <span>واكتب تاريخ فريقك</span>
+              </h2>
+
+
+              <p>
+                مزاد، منافسة، قرارات، كرات ذهبية،
+                لاعبين أساطير وحاليين، روبوت ذكي،
+                غرف أونلاين ونتائج تحاكي المباراة.
+              </p>
+
+
+              <div class="hero-stats">
+
+                <div class="hero-stat">
+
+                  <strong>3</strong>
+
+                  <span>ألعاب</span>
+
+                </div>
+
+
+                <div class="hero-stat">
+
+                  <strong>11</strong>
+
+                  <span>لاعب في البرو ماكس</span>
+
+                </div>
+
+
+                <div class="hero-stat">
+
+                  <strong>∞</strong>
+
+                  <span>مباريات</span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+             PLAYER SETUP
+             =================================================== -->
+
+        <section class="player-setup card">
+
+          <div class="section-title">
+
+            <div>
+
+              <span class="mini-label">
+                PLAYER SETUP
+              </span>
+
+              <h3>
+                مين هيلعب؟
+              </h3>
+
+            </div>
+
+
+            <span class="title-icon">
+              👤⚽
+            </span>
+
+          </div>
+
+
+          <div class="name-grid">
+
+
+            <!-- PLAYER ONE -->
+
+            <div class="field-group">
+
+              <label for="playerOneName">
+                اسم اللاعب الأول
+              </label>
+
+              <input
+                id="playerOneName"
+                type="text"
+                maxlength="20"
+                placeholder="اكتب اسمك..."
+                autocomplete="off"
+              >
+
+            </div>
+
+
+            <!-- PLAYER TWO -->
+
+            <div class="field-group">
+
+              <label for="playerTwoName">
+                اسم اللاعب الثاني
+              </label>
+
+              <input
+                id="playerTwoName"
+                type="text"
+                maxlength="20"
+                placeholder="اسم صاحبك..."
+                autocomplete="off"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="setup-note">
+
+            💡
+            لو هتلعب ضد الروبوت أو من خلال غرفة أونلاين،
+            اكتب اسم اللاعب الأول فقط.
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+             GAME MODES
+             =================================================== -->
+
+        <section class="games-section">
+
+
+          <div class="section-title main-section-title">
+
+            <div>
+
+              <span class="mini-label">
+                CHOOSE YOUR BATTLE
+              </span>
+
+              <h3>
+                اختار اللعبة
+              </h3>
+
+            </div>
+
+
+            <span class="title-icon">
+              🔥
+            </span>
+
+          </div>
+
+
+
+          <div class="games-grid">
+
+
+            <!-- =================================================
+                 PRO MAX 11
+                 ================================================= -->
+
+            <article
+              class="game-card game-card-pro"
+              data-game="promax"
+            >
+
+              <div class="game-card-glow"></div>
+
+
+              <div class="game-card-top">
+
+                <div class="game-icon">
+                  🔨
+                </div>
+
+
+                <span class="game-number">
+                  01
+                </span>
+
+              </div>
+
+
+              <div class="game-card-content">
+
+                <span class="game-tag">
+                  11 PLAYERS
+                </span>
+
+
+                <h4>
+                  مزاد برو ماكس
+                </h4>
+
+
+                <p>
+                  ابنِ تشكيلتك من 11 لاعبًا
+                  من الحارس حتى رأس الحربة.
+                  اللاعبان يتنافسان على كل لاعب
+                  حتى تكتمل التشكيلة.
+                </p>
+
+
+                <div class="formation-mini">
+                  GK · LB · CB · CB · RB · CM · CM · CAM · RW · LW · ST
+                </div>
+
+
+                <div class="game-card-info">
+
+                  <span>
+                    💰 2B Budget
+                  </span>
+
+                  <span>
+                    🃏 Wild Card
+                  </span>
+
+                  <span>
+                    🏆 Captain
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <button
+                class="game-play-btn"
+                type="button"
+                data-game-start="promax"
+              >
+                <span>ابدأ المزاد</span>
+                <span>←</span>
+              </button>
+
+            </article>
+
+
+
+            <!-- =================================================
+                 FIVE A SIDE
+                 ================================================= -->
+
+            <article
+              class="game-card game-card-five"
+              data-game="five"
+            >
+
+              <div class="game-card-glow"></div>
+
+
+              <div class="game-card-top">
+
+                <div class="game-icon">
+                  🏟️
+                </div>
+
+
+                <span class="game-number">
+                  02
+                </span>
+
+              </div>
+
+
+              <div class="game-card-content">
+
+                <span class="game-tag">
+                  5 A SIDE
+                </span>
+
+
+                <h4>
+                  الملعب الخماسي
+                </h4>
+
+
+                <p>
+                  خمس لاعبين فقط.
+                  مزاد سريع وقرارات أقوى
+                  من الحارس إلى رأس الحربة.
+                </p>
+
+
+                <div class="formation-mini">
+                  GK · CB · CM · CAM · ST
+                </div>
+
+
+                <div class="game-card-info">
+
+                  <span>
+                    ⚡ Fast Auction
+                  </span>
+
+                  <span>
+                    🃏 Wild Card
+                  </span>
+
+                  <span>
+                    🏆 Captain
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <button
+                class="game-play-btn"
+                type="button"
+                data-game-start="five"
+              >
+                <span>ابدأ اللعبة</span>
+                <span>←</span>
+              </button>
+
+            </article>
+
+
+
+            <!-- =================================================
+                 DEAL OR NO DEAL
+                 ================================================= -->
+
+            <article
+              class="game-card game-card-deal"
+              data-game="deal"
+            >
+
+              <div class="game-card-glow"></div>
+
+
+              <div class="game-card-top">
+
+                <div class="game-icon">
+                  📦
+                </div>
+
+
+                <span class="game-number">
+                  03
+                </span>
+
+              </div>
+
+
+              <div class="game-card-content">
+
+                <span class="game-tag">
+                  DEAL OR NO DEAL
+                </span>
+
+
+                <h4>
+                  صناديق الحظ
+                </h4>
+
+
+                <p>
+                  أربع بوكسات لكل مركز.
+                  افتح بوكسين فقط،
+                  وخد قرارات DEAL أو NO DEAL.
+                </p>
+
+
+                <div class="formation-mini">
+                  GK · DEF · CM · CAM · ST
+                </div>
+
+
+                <div class="game-card-info">
+
+                  <span>
+                    📦 4 Boxes
+                  </span>
+
+                  <span>
+                    🔄 2 Attempts
+                  </span>
+
+                  <span>
+                    🃏 Wild Card
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <button
+                class="game-play-btn"
+                type="button"
+                data-game-start="deal"
+              >
+                <span>ابدأ التحدي</span>
+                <span>←</span>
+              </button>
+
+            </article>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+             MORE MODES
+             =================================================== -->
+
+        <section class="extra-modes">
+
+
+          <div class="section-title">
+
+            <div>
+
+              <span class="mini-label">
+                MORE MODES
+              </span>
+
+              <h3>
+                طرق اللعب
+              </h3>
+
+            </div>
+
+
+            <span class="title-icon">
+              🎮
+            </span>
+
+          </div>
+
+
+
+          <div class="mode-grid">
+
+
+            <!-- ROBOT -->
+
+            <button
+              class="mode-tile"
+              type="button"
+              data-action="robot"
+            >
+
+              <span class="mode-icon">
+                🤖
+              </span>
+
+
+              <div>
+
+                <strong>
+                  روبوت ذكي
+                </strong>
+
+                <small>
+                  العب ضد الذكاء الاصطناعي
+                </small>
+
+              </div>
+
+
+              <span class="mode-arrow">
+                ←
+              </span>
+
+            </button>
+
+
+
+            <!-- ONLINE ROOM -->
+
+            <button
+              class="mode-tile"
+              type="button"
+              data-action="room"
+            >
+
+              <span class="mode-icon">
+                🌐
+              </span>
+
+
+              <div>
+
+                <strong>
+                  غرفة أونلاين
+                </strong>
+
+                <small>
+                  العب مع صاحبك بكود من 6 رموز
+                </small>
+
+              </div>
+
+
+              <span class="mode-arrow">
+                ←
+              </span>
+
+            </button>
+
+
+
+            <!-- EXPLAIN -->
+
+            <button
+              class="mode-tile"
+              type="button"
+              data-action="explain"
+            >
+
+              <span class="mode-icon">
+                📖
+              </span>
+
+
+              <div>
+
+                <strong>
+                  شرح الموقع
+                </strong>
+
+                <small>
+                  اعرف كل أسرار R2
+                </small>
+
+              </div>
+
+
+              <span class="mode-arrow">
+                ←
+              </span>
+
+            </button>
+
+
+
+            <!-- PLAYERS -->
+
+            <button
+              class="mode-tile"
+              type="button"
+              data-action="players"
+            >
+
+              <span class="mode-icon">
+                🃏
+              </span>
+
+
+              <div>
+
+                <strong>
+                  مكتبة اللاعبين
+                </strong>
+
+                <small>
+                  كل اللاعبين والأوفرات والمراكز
+                </small>
+
+              </div>
+
+
+              <span class="mode-arrow">
+                ←
+              </span>
+
+            </button>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+             LAST MATCH
+             =================================================== -->
+
+        <section
+          id="lastMatchSection"
+          class="last-match-section hidden"
+        >
+
+          <div class="section-title">
+
+            <div>
+
+              <span class="mini-label">
+                LAST MATCH
+              </span>
+
+              <h3>
+                آخر مباراة
+              </h3>
+
+            </div>
+
+
+            <span class="title-icon">
+              📊
+            </span>
+
+          </div>
+
+
+          <div id="lastMatchCard"></div>
+
+        </section>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           FRIENDS PAGE
+           ===================================================== -->
+
+      <section
+        id="friendsPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              SOCIAL
+            </span>
+
+            <h2>
+              الأصدقاء
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            👥
+          </span>
+
+        </div>
+
+
+
+        <div class="friends-layout">
+
+
+          <!-- MY ID -->
+
+          <div class="card my-id-card">
+
+            <div class="card-heading">
+
+              <span class="card-icon">
+                🪪
+              </span>
+
+
+              <div>
+
+                <h3>
+                  المعرف الخاص بي
+                </h3>
+
+                <p>
+                  معرف عشوائي مكون من 16 رقم.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="myFriendId"
+              class="friend-id"
+            >
+              0000000000000000
+            </div>
+
+
+            <button
+              id="copyFriendId"
+              class="primary-btn"
+              type="button"
+            >
+              📋 نسخ المعرف
+            </button>
+
+          </div>
+
+
+
+          <!-- ADD FRIEND -->
+
+          <div class="card add-friend-card">
+
+            <div class="card-heading">
+
+              <span class="card-icon">
+                ➕
+              </span>
+
+
+              <div>
+
+                <h3>
+                  إضافة صديق
+                </h3>
+
+                <p>
+                  اكتب معرف صاحبك وأرسل طلب صداقة.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="friend-input-row">
+
+              <input
+                id="friendIdInput"
+                type="text"
+                maxlength="16"
+                inputmode="numeric"
+                placeholder="اكتب ID صاحبك..."
+                autocomplete="off"
+              >
+
+
+              <button
+                id="sendFriendRequest"
+                class="primary-btn"
+                type="button"
+              >
+                إرسال طلب صداقة
+              </button>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- FRIENDS LIST -->
+
+          <div class="card friends-list-card">
+
+            <div class="card-heading">
+
+              <span class="card-icon">
+                ⭐
+              </span>
+
+
+              <div>
+
+                <h3>
+                  قائمة الأصدقاء
+                </h3>
+
+                <p>
+                  أصحابك اللي قبلوا طلبات الصداقة.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div id="friendsList">
+
+              <div class="empty-state">
+
+                <span>
+                  👥
+                </span>
+
+                <p>
+                  لسه مفيش أصدقاء.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           INBOX PAGE
+           ===================================================== -->
+
+      <section
+        id="inboxPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              MESSAGES
+            </span>
+
+            <h2>
+              البريد الوارد
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            ✉️
+          </span>
+
+        </div>
+
+
+
+        <div class="card inbox-card">
+
+          <div id="inboxList">
+
+            <div class="empty-state">
+
+              <span>
+                📭
+              </span>
+
+              <h3>
+                البريد فاضي
+              </h3>
+
+              <p>
+                لما يوصلك طلب صداقة هيظهر هنا.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           EVENTS PAGE
+           ===================================================== -->
+
+      <section
+        id="eventsPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              EVENTS
+            </span>
+
+            <h2>
+              الأحداث
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            🏆
+          </span>
+
+        </div>
+
+
+
+        <!-- EVENT BANNER -->
+
+        <div class="event-banner">
+
+          <div class="event-banner-content">
+
+            <span class="event-country">
+              🇪🇸 SPAIN
+            </span>
+
+
+            <h2>
+              حدث الدوري الإسباني
+            </h2>
+
+
+            <p>
+              عروض خاصة خارج المزاد.
+              كل أسبوع له لاعبين مختلفين.
+            </p>
+
+          </div>
+
+
+          <div class="event-ball">
+            ⚽
+          </div>
+
+        </div>
+
+
+
+        <!-- WEEKS -->
+
+        <div class="weeks-grid">
+
+
+          <button
+            class="week-card active"
+            type="button"
+            data-week="1"
+          >
+
+            <span class="week-number">
+              01
+            </span>
+
+
+            <div>
+
+              <strong>
+                الأسبوع 1
+              </strong>
+
+              <small>
+                فعال الآن
+              </small>
+
+            </div>
+
+
+            <span class="week-status active">
+              متاح
+            </span>
+
+          </button>
+
+
+
+          <button
+            class="week-card locked"
+            type="button"
+            data-week="2"
+            disabled
+          >
+
+            <span class="week-number">
+              02
+            </span>
+
+
+            <div>
+
+              <strong>
+                الأسبوع 2
+              </strong>
+
+              <small>
+                قريبًا
+              </small>
+
+            </div>
+
+
+            <span class="week-status">
+              🔒
+            </span>
+
+          </button>
+
+
+
+          <button
+            class="week-card locked"
+            type="button"
+            data-week="3"
+            disabled
+          >
+
+            <span class="week-number">
+              03
+            </span>
+
+
+            <div>
+
+              <strong>
+                الأسبوع 3
+              </strong>
+
+              <small>
+                قريبًا
+              </small>
+
+            </div>
+
+
+            <span class="week-status">
+              🔒
+            </span>
+
+          </button>
+
+
+
+          <button
+            class="week-card locked"
+            type="button"
+            data-week="4"
+            disabled
+          >
+
+            <span class="week-number">
+              04
+            </span>
+
+
+            <div>
+
+              <strong>
+                الأسبوع 4
+              </strong>
+
+              <small>
+                قريبًا
+              </small>
+
+            </div>
+
+
+            <span class="week-status">
+              🔒
+            </span>
+
+          </button>
+
+        </div>
+
+
+
+        <!-- EVENT PLAYERS -->
+
+        <div
+          id="eventPlayers"
+          class="event-players-section"
+        ></div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           SETTINGS PAGE
+           ===================================================== -->
+
+      <section
+        id="settingsPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              SETTINGS
+            </span>
+
+            <h2>
+              الإعدادات
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            ⚙️
+          </span>
+
+        </div>
+
+
+
+        <div class="settings-grid">
+
+
+          <!-- SOUND -->
+
+          <div class="card setting-card">
+
+            <div class="setting-icon">
+              🔊
+            </div>
+
+
+            <div class="setting-content">
+
+              <h3>
+                صوت الموقع
+              </h3>
+
+              <p>
+                شغل أو اقفل أصوات الأزرار والأحداث.
+              </p>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                id="soundToggle"
+                type="checkbox"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+
+
+          <!-- VOLUME -->
+
+          <div class="card setting-card">
+
+            <div class="setting-icon">
+              🔉
+            </div>
+
+
+            <div class="setting-content">
+
+              <h3>
+                مستوى الصوت
+              </h3>
+
+              <p>
+                تحكم في قوة الصوت.
+              </p>
+
+            </div>
+
+
+            <input
+              id="volumeSlider"
+              class="range-slider"
+              type="range"
+              min="0"
+              max="100"
+              value="22"
+            >
+
+          </div>
+
+
+
+          <!-- ROBOT DIFFICULTY -->
+
+          <div class="card setting-card difficulty-card">
+
+            <div class="setting-icon">
+              🤖
+            </div>
+
+
+            <div class="setting-content">
+
+              <h3>
+                صعوبة الروبوت
+              </h3>
+
+              <p>
+                كلما زادت الصعوبة أصبح الروبوت أذكى.
+              </p>
+
+            </div>
+
+
+            <select id="difficultySelect">
+
+              <option value="beginner">
+                مبتدئ
+              </option>
+
+              <option value="amateur">
+                هاوي
+              </option>
+
+              <option value="semi-pro">
+                نصف محترف
+              </option>
+
+              <option value="pro">
+                محترف
+              </option>
+
+              <option value="world-class">
+                عالمي
+              </option>
+
+              <option value="legendary">
+                أسطوري
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           EXPLAIN PAGE
+           ===================================================== -->
+
+      <section
+        id="explainPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              R2 GUIDE
+            </span>
+
+            <h2>
+              شرح الموقع
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            📖
+          </span>
+
+        </div>
+
+
+
+        <div class="card poem-card">
+
+          <div class="poem-title">
+            ⚽ قصيدة R2 ⚽
+          </div>
+
+
+          <div class="poem">
+
+            <p>
+              في R2 تدخل الملعب وانتَ أمير،
+              تختار فريقك وتبني المصير.
+            </p>
+
+
+            <p>
+              مزاد برو ماكس يا بطل يا خطير،
+              أحدعشر لاعب من الحارس للأخير.
+            </p>
+
+
+            <p>
+              حارس وظهير وقلبين كبار،
+              وظهير تاني يكمل المشوار.
+            </p>
+
+
+            <p>
+              ووسطين وCAM في قلب الميدان،
+              وجناحين ورأس حربة يكملان.
+            </p>
+
+
+            <p>
+              والملعب الخماسي سريع وشرس،
+              خمس لاعيبة وكل قرار له درس.
+            </p>
+
+
+            <p>
+              حارس وقلب دفاع ووسط،
+              CAM ورأس حربة في الخط.
+            </p>
+
+
+            <p>
+              وفي ديل أور نو ديل البوكسات تدور،
+              أربع صناديق والاختيارات تنور.
+            </p>
+
+
+            <p>
+              تفتح اتنين من كل مركز،
+              ويمكن يطلع نجم يغير المنظر.
+            </p>
+
+
+            <p>
+              DEAL تاخد اللاعب اللي ظهر،
+              وNO DEAL تقول لسه في أمل آخر.
+            </p>
+
+
+            <p>
+              والمحاولة التانية قرارها إجباري،
+              لو اللاعب طلع خلاص بقى اختياري.
+            </p>
+
+
+            <p>
+              وبعد ما تخلص التشكيلة يا بطل،
+              Wild Card واحدة لكل لاعب تتعمل.
+            </p>
+
+
+            <p>
+              وبعدها الكابتن تختار من الفريق،
+              ثم تبدأ المباراة في توقيت دقيق.
+            </p>
+
+
+            <p>
+              أهداف ودقايق وصانع أهداف،
+              ورجل المباراة ياخد الأضواء.
+            </p>
+
+
+            <p>
+              والنتيجة مش رقم مرمي وخلاص،
+              قوة الفريق تحدد مين هيكسب في القصاص.
+            </p>
+
+
+            <p>
+              ولو صاحبك بعيد ومش جنبك مكان،
+              غرفة أونلاين تجمعكم في ثواني زمان.
+            </p>
+
+
+            <p>
+              كود من ستة رموز تدخلوا بيه،
+              وكل لاعب يعرف تشكيلته ويبدأ بيه.
+            </p>
+
+
+            <p>
+              أصدقاء وبريد وأحداث كمان،
+              والدوري الإسباني عامل مهرجان.
+            </p>
+
+
+            <p>
+              والروبوت ليه ست درجات،
+              من مبتدئ لأسطوري بكل المستويات.
+            </p>
+
+
+            <p class="poem-final">
+              دي R2 يا صاحبي مش مجرد لعبة،
+              دي كرة ومزاد ومنافسة ومحبة! 🔥
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           PLAYERS LIBRARY PAGE
+           ===================================================== -->
+
+      <section
+        id="playersPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              PLAYER DATABASE
+            </span>
+
+            <h2>
+              مكتبة اللاعبين
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            🃏
+          </span>
+
+        </div>
+
+
+
+        <div class="player-library-tools card">
+
+
+          <input
+            id="playerSearch"
+            type="search"
+            placeholder="🔎 ابحث عن لاعب..."
+            autocomplete="off"
+          >
+
+
+          <div
+            id="positionFilters"
+            class="position-filters"
+          >
+
+            <button
+              type="button"
+              class="filter-btn active"
+              data-position="ALL"
+            >
+              الكل
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="GK"
+            >
+              GK
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="LB"
+            >
+              LB
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="CB"
+            >
+              CB
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="RB"
+            >
+              RB
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="CM"
+            >
+              CM
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="CAM"
+            >
+              CAM
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="RW"
+            >
+              RW
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="LW"
+            >
+              LW
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              data-position="ST"
+            >
+              ST
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <div
+          id="playersLibraryGrid"
+          class="players-library-grid"
+        ></div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           ONLINE ROOM PAGE
+           ===================================================== -->
+
+      <section
+        id="roomPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              ONLINE
+            </span>
+
+            <h2>
+              غرفة أونلاين
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            🌐
+          </span>
+
+        </div>
+
+
+
+        <div class="room-layout">
+
+
+          <!-- CREATE ROOM -->
+
+          <div class="card room-create">
+
+            <div class="room-big-icon">
+              🏠
+            </div>
+
+
+            <h3>
+              إنشاء غرفة
+            </h3>
+
+
+            <p>
+              اعمل غرفة وخد كود عشوائي
+              ابعته لصاحبك.
+            </p>
+
+
+            <button
+              id="createRoomBtn"
+              class="primary-btn big-btn"
+              type="button"
+            >
+              إنشاء غرفة
+            </button>
+
+
+            <div
+              id="createdRoomCode"
+              class="created-room-code hidden"
+            ></div>
+
+          </div>
+
+
+
+          <div class="room-divider">
+            <span>أو</span>
+          </div>
+
+
+
+          <!-- JOIN ROOM -->
+
+          <div class="card room-join">
+
+            <div class="room-big-icon">
+              🔑
+            </div>
+
+
+            <h3>
+              دخول غرفة
+            </h3>
+
+
+            <p>
+              اكتب كود الغرفة المكون من 6 رموز.
+            </p>
+
+
+            <input
+              id="roomCodeInput"
+              class="room-code-input"
+              type="text"
+              maxlength="6"
+              placeholder="A7K2P9"
+              autocomplete="off"
+            >
+
+
+            <button
+              id="joinRoomBtn"
+              class="primary-btn big-btn"
+              type="button"
+            >
+              دخول الغرفة
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <div
+          id="roomStatus"
+          class="room-status hidden"
+        ></div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           ROBOT PAGE
+           ===================================================== -->
+
+      <section
+        id="robotPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div>
+
+            <span class="mini-label">
+              AI OPPONENT
+            </span>
+
+            <h2>
+              روبوت ذكي
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            🤖
+          </span>
+
+        </div>
+
+
+
+        <div class="robot-hero card">
+
+          <div class="robot-avatar">
+            🤖
+          </div>
+
+
+          <div>
+
+            <span class="mini-label">
+              ARTIFICIAL INTELLIGENCE
+            </span>
+
+
+            <h3>
+              هل تقدر تهزم الروبوت؟
+            </h3>
+
+
+            <p>
+              اختار مستوى الصعوبة ثم اختر اللعبة.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- DIFFICULTIES -->
+
+        <div class="robot-difficulty-grid">
+
+
+          <button
+            type="button"
+            class="difficulty-tile"
+            data-difficulty="beginner"
+          >
+            <span>🟢</span>
+            <strong>مبتدئ</strong>
+            <small>للبداية</small>
+          </button>
+
+
+          <button
+            type="button"
+            class="difficulty-tile"
+            data-difficulty="amateur"
+          >
+            <span>🔵</span>
+            <strong>هاوي</strong>
+            <small>تحدي خفيف</small>
+          </button>
+
+
+          <button
+            type="button"
+            class="difficulty-tile"
+            data-difficulty="semi-pro"
+          >
+            <span>🟡</span>
+            <strong>نصف محترف</strong>
+            <small>أصعب شوية</small>
+          </button>
+
+
+          <button
+            type="button"
+            class="difficulty-tile"
+            data-difficulty="pro"
+          >
+            <span>🟠</span>
+            <strong>محترف</strong>
+            <small>خليك مركز</small>
+          </button>
+
+
+          <button
+            type="button"
+            class="difficulty-tile"
+            data-difficulty="world-class"
+          >
+            <span>🔴</span>
+            <strong>عالمي</strong>
+            <small>مستوى عالي</small>
+          </button>
+
+
+          <button
+            type="button"
+            class="difficulty-tile"
+            data-difficulty="legendary"
+          >
+            <span>🟣</span>
+            <strong>أسطوري</strong>
+            <small>للمحترفين فقط</small>
+          </button>
+
+        </div>
+
+
+
+        <!-- ROBOT GAMES -->
+
+        <div class="robot-games">
+
+
+          <button
+            class="robot-game-btn"
+            type="button"
+            data-robot-game="promax"
+          >
+            🔨 مزاد برو ماكس
+          </button>
+
+
+          <button
+            class="robot-game-btn"
+            type="button"
+            data-robot-game="five"
+          >
+            🏟️ الملعب الخماسي
+          </button>
+
+
+          <button
+            class="robot-game-btn"
+            type="button"
+            data-robot-game="deal"
+          >
+            📦 DEAL OR NO DEAL
+          </button>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           GAME PAGE
+           ===================================================== -->
+
+      <section
+        id="gamePage"
+        class="page game-page"
+      >
+
+
+        <!-- GAME HEADER -->
+
+        <div class="game-header">
+
+
+          <button
+            class="back-btn"
+            type="button"
+            data-action="home"
+          >
+            → الرئيسية
+          </button>
+
+
+          <div
+            id="gameTitle"
+            class="game-title"
+          >
+            R2 GAME
+          </div>
+
+
+          <div
+            id="gameBudget"
+            class="game-budget"
+          >
+            💰 0M
+          </div>
+
+        </div>
+
+
+
+        <!-- GAME PROGRESS -->
+
+        <div
+          id="gameProgress"
+          class="game-progress"
+        >
+
+          <div class="game-progress-step active">
+            <span>1</span>
+            <small>اللعبة</small>
+          </div>
+
+
+          <div class="game-progress-line"></div>
+
+
+          <div class="game-progress-step">
+            <span>2</span>
+            <small>التشكيلة</small>
+          </div>
+
+
+          <div class="game-progress-line"></div>
+
+
+          <div class="game-progress-step">
+            <span>3</span>
+            <small>الكابتن</small>
+          </div>
+
+
+          <div class="game-progress-line"></div>
+
+
+          <div class="game-progress-step">
+            <span>4</span>
+            <small>المباراة</small>
+          </div>
+
+        </div>
+
+
+
+        <!-- CURRENT GAME -->
+
+        <div
+          id="gameContent"
+          class="game-content"
+        ></div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           CAPTAIN PAGE
+           ===================================================== -->
+
+      <section
+        id="captainPage"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <div>
+
+            <span class="mini-label">
+              FINAL DECISION
+            </span>
+
+            <h2>
+              اختيار الكابتن
+            </h2>
+
+          </div>
+
+
+          <span class="page-header-icon">
+            ©️
+          </span>
+
+        </div>
+
+
+        <div
+          id="captainSelectionContent"
+          class="captain-selection-content"
+        ></div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           MATCH RESULT PAGE
+           ===================================================== -->
+
+      <section
+        id="resultPage"
+        class="page result-page"
+      >
+
+        <div class="result-hero">
+
+          <span class="mini-label">
+            FULL TIME
+          </span>
+
+
+          <h2>
+            نهاية المباراة
+          </h2>
+
+
+          <div
+            id="matchScore"
+            class="match-score"
+          >
+            0 - 0
+          </div>
+
+
+          <div
+            id="winnerBox"
+            class="winner-box"
+          >
+            الفائز: -
+          </div>
+
+        </div>
+
+
+
+        <!-- TEAMS -->
+
+        <div
+          id="resultTeams"
+          class="result-teams"
+        ></div>
+
+
+
+        <!-- MATCH STATS -->
+
+        <section class="match-statistics-section">
+
+          <div class="section-title">
+
+            <div>
+
+              <span class="mini-label">
+                MATCH REPORT
+              </span>
+
+              <h3>
+                إحصائيات المباراة
+              </h3>
+
+            </div>
+
+
+            <span class="title-icon">
+              📊
+            </span>
+
+          </div>
+
+
+          <div
+            id="matchStatistics"
+            class="match-statistics"
+          ></div>
+
+        </section>
+
+
+
+        <!-- GOALS -->
+
+        <section class="match-events-section">
+
+          <div class="section-title">
+
+            <div>
+
+              <span class="mini-label">
+                MATCH EVENTS
+              </span>
+
+              <h3>
+                أحداث المباراة
+              </h3>
+
+            </div>
+
+
+            <span class="title-icon">
+              ⚽
+            </span>
+
+          </div>
+
+
+          <div
+            id="matchEvents"
+            class="match-events"
+          ></div>
+
+        </section>
+
+
+
+        <!-- MVP -->
+
+        <section class="mvp-section">
+
+          <div
+            id="manOfTheMatch"
+            class="man-of-match"
+          ></div>
+
+        </section>
+
+
+
+        <!-- RESULT ACTIONS -->
+
+        <div class="result-actions">
+
+          <button
+            id="shareResultBtn"
+            class="primary-btn result-action-btn"
+            type="button"
+          >
+            📤 إرسال النتيجة
+          </button>
+
+
+          <button
+            id="homeAfterMatchBtn"
+            class="secondary-btn result-action-btn"
+            type="button"
+            data-action="home"
+          >
+            🏠 العودة إلى الصفحة الرئيسية
+          </button>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+
+    <!-- =======================================================
+         GLOBAL MODAL
+         ======================================================= -->
+
+    <div
+      id="modal"
+      class="modal"
+      aria-hidden="true"
+    >
+
+      <div
+        class="modal-overlay"
+        data-modal-close
+      ></div>
+
+
+      <div
+        class="modal-box"
+        role="dialog"
+        aria-modal="true"
+      >
+
+        <button
+          id="modalClose"
+          class="modal-close"
+          type="button"
+          aria-label="إغلاق"
+          data-modal-close
+        >
+          ×
+        </button>
+
+
+        <div
+          id="modalBody"
+          class="modal-body"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =======================================================
+         TOAST
+         ======================================================= -->
+
+    <div
+      id="toastContainer"
+      class="toast-container"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+
+
+    <!-- =======================================================
+         LOADING SCREEN
+         ======================================================= -->
+
+    <div
+      id="loadingScreen"
+      class="loading-screen hidden"
+    >
+
+      <div class="loading-logo">
+
+        R<span>2</span>
+
+      </div>
+
+
+      <div class="loading-spinner"></div>
+
+
+      <p>
+        جاري تجهيز المباراة...
+      </p>
+
+    </div>
+
+
+
+    <!-- =======================================================
+         FOOTER
+         ======================================================= -->
+
+    <footer class="site-footer">
+
+
+      <div class="footer-brand">
+
+        <span>R2</span>
+
+        FOOTBALL GAMES
+
+      </div>
+
+
+      <p>
+        ⚽ العب · زايد · اختار · اكسب
+      </p>
+
+
+      <span class="footer-version">
+        R2 v3.0
+      </span>
+
+    </footer>
+
+  </div>
+
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+       مهم جدًا:
+       الترتيب لا يتغير
+       ========================================================= -->
+
+  <script src="data.js"></script>
+
+  <script src="sound.js"></script>
+
+  <script src="games.js"></script>
+
+  <script src="app.js"></script>
+
+</body>
+    </html>
